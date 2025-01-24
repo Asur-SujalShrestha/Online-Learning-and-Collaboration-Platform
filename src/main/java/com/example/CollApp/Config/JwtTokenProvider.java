@@ -1,5 +1,6 @@
 package com.example.CollApp.Config;
 
+import com.example.CollApp.Model.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,22 +27,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider implements Serializable {
-    private final String secretKeys;
 
-    public JwtTokenProvider() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("sujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujalsujal");
-            SecretKey secretKey = keyGenerator.generateKey();
-            secretKeys = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Value("${jwt.secret}")
+    private String secretKeys;
 
     @Value("${jwt.token.validity}")
     private long TOKEN_VALIDITY;
-
 
     @Value("${jwt.authorities.key}")
     private String AUTHORITIES_KEY;
@@ -73,15 +64,23 @@ public class JwtTokenProvider implements Serializable {
     }
 
     private Boolean isTokenExpired(String token) {
-        return getExpirationDateFromToken(token).before(new Date());
+        try {
+            return getExpirationDateFromToken(token).before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication, Users user) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("Email", user.getEmail())
+                .claim("DOB", user.getDob().toString())
+                .claim("Full Name", user.getFirstName() + " " + user.getLastName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
@@ -93,7 +92,9 @@ public class JwtTokenProvider implements Serializable {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
+
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(
+            final String token, final Authentication existingAuth, final UserDetails userDetails) {
         final Claims claims = getAllClaimsFromToken(token);
 
         final Collection<? extends GrantedAuthority> authorities = Arrays
@@ -104,3 +105,4 @@ public class JwtTokenProvider implements Serializable {
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 }
+

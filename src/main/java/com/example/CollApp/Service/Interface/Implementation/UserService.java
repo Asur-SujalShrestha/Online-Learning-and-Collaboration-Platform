@@ -2,33 +2,33 @@ package com.example.CollApp.Service.Interface.Implementation;
 
 import com.example.CollApp.DTO.LoginDTO;
 import com.example.CollApp.DTO.RegisterDTO;
+import com.example.CollApp.DTO.ResponseDTO;
 import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IUserService;
-import org.springframework.context.annotation.Role;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -63,13 +63,8 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public Users loginUser(LoginDTO loginDTO) {
-        Users user = userRepository.findByEmail(loginDTO.getEmail());
-
-        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Incorrect password.");
-        }
-        return user;
+    public List<Users> getAllUsers() {
+        return userRepository.findAll();
     }
 
 
