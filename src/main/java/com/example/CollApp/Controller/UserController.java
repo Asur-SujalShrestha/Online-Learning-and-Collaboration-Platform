@@ -34,6 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin("http://localhost:5173")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO request) {
         try {
             ResponseDTO user = authService.generateToken(request);

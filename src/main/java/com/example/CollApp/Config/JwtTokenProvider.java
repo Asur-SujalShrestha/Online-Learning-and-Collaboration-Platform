@@ -81,7 +81,7 @@ public class JwtTokenProvider implements Serializable {
                 .claim("Email", user.getEmail())
                 .claim("DOB", user.getDob().toString())
                 .claim("Full Name", user.getFirstName() + " " + user.getLastName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .claim(AUTHORITIES_KEY, "ROLE_"+authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
                 .signWith(getKey(), SignatureAlgorithm.HS256)

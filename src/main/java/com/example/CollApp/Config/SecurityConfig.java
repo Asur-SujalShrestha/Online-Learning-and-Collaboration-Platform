@@ -30,7 +30,8 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
-                        auth.requestMatchers("/collapp/users/**").permitAll()
+                        auth.requestMatchers("/collapp/users/register", "/collapp/users/login").permitAll()
+                                .requestMatchers("/collapp/users/all-user").hasRole("ADMIN")
                                 .anyRequest().authenticated();})
                 .exceptionHandling((ex)->ex.authenticationEntryPoint(unauthorizedEntryPoint))
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
