@@ -5,6 +5,7 @@ import com.example.CollApp.DTO.LoginDTO;
 import com.example.CollApp.DTO.ResponseDTO;
 import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,4 +45,8 @@ public class AuthService {
                 .role(users.getRole())
                 .build();
     }
+
+//    public ResponseEntity<String> forgetPassword(String email){
+//        Users user = userRepository.findByEmail(email);
+//    }
 }

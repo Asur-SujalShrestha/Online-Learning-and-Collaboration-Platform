@@ -22,6 +22,17 @@ public class Users  {
     private String role;
     private String profilePic;
 
+    public ForgetPassword getForgetPassword() {
+        return forgetPassword;
+    }
+
+    public void setForgetPassword(ForgetPassword forgetPassword) {
+        this.forgetPassword = forgetPassword;
+    }
+
+    @OneToOne(mappedBy = "users")
+    private ForgetPassword forgetPassword;
+
     public Users(Long id, String firstName, String lastName, LocalDate dob, String email, String address, String password, String role, String profilePic) {
         this.id = id;
         this.firstName = firstName;
