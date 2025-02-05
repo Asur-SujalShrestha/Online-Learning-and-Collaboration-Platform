@@ -30,7 +30,7 @@ public class Users  {
         this.forgetPassword = forgetPassword;
     }
 
-    @OneToOne(mappedBy = "users")
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
     private ForgetPassword forgetPassword;
 
     public Users(Long id, String firstName, String lastName, LocalDate dob, String email, String address, String password, String role, String profilePic) {

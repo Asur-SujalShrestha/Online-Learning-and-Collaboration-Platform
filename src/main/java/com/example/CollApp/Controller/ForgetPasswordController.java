@@ -17,6 +17,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/collapp/auth")
+@CrossOrigin("http://localhost:5173")
 public class ForgetPasswordController {
     private final EmailService emailService;
 

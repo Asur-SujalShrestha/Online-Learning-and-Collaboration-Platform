@@ -14,9 +14,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -72,20 +74,32 @@ public class EmailService implements IEmailService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<String> varifyOtp(int otp, String email){
+    @Transactional
+    public ResponseEntity<String> varifyOtp(int otp, String email) {
         Users user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("Please use valid Email.");
+            throw new UsernameNotFoundException("Please use a valid Email.");
         }
-        ForgetPassword forgetPassword = forgetPasswordRepository.findByEmailAndOtp(user, otp).orElseThrow(() -> new RuntimeException("OTP not matched. Try Again"));
 
-        if(forgetPassword.getExpiryDate().before(Date.from(Instant.now()))){
-            forgetPasswordRepository.delete(forgetPassword);
-            return new ResponseEntity<>("OTP has Expired", HttpStatus.EXPECTATION_FAILED);
+        ForgetPassword forgetPassword = user.getForgetPassword();
+
+        if (forgetPassword == null || forgetPassword.getOtpCode() != otp) {
+            return new ResponseEntity<>("Invalid OTP", HttpStatus.BAD_REQUEST);
         }
-        forgetPasswordRepository.delete(forgetPassword);
+
+        if (forgetPassword.getExpiryDate().before(Date.from(Instant.now()))) {
+            user.setForgetPassword(null); // Remove reference
+            userRepository.save(user);    // Save user to trigger orphan removal
+            return new ResponseEntity<>("OTP has Expired. Please request another OTP.", HttpStatus.EXPECTATION_FAILED);
+        }
+
+        user.setForgetPassword(null); // Remove reference
+        userRepository.save(user);    // Save user to trigger orphan removal
+
         return ResponseEntity.ok("OTP verified");
     }
+
+
 
     public ResponseEntity<String> changePassword(ChangeUserPassword changeUserPassword, String email) {
         Users user = userRepository.findByEmail(email);
