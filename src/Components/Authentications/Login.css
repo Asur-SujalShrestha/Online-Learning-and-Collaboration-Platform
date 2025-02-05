@@ -53,12 +53,10 @@ body {
 }
 
 .login-title {
-  position: absolute;
-  top: 20px;
-  left: 37%;
-  font-size: 44px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 40px;
+  text-align: center;
+  margin: 0px 0 10px 0;
+  padding: auto;
 }
 
 .form-group {
@@ -67,16 +65,17 @@ body {
 
 label {
   display: block;
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
 input {
-  width: 100%;
-  padding: 15px 10px;
-  font-size: 18px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
 }
 
 .password-container {
@@ -101,10 +100,10 @@ input {
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .form-group:nth-child(2){
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .form-options label{
   display: flex;
@@ -135,19 +134,48 @@ input {
 }
 
 .login-button {
-  width: 40%;
-  padding: 19px;
-  font-size: 19px;
-  font-weight: bold;
-  color: white;
-  background-color: black;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  top: 40px;
+  width: 32%;
+    padding: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    top: 20px;
 }
 
 .login-button:hover {
   background-color: #333;
+}
+.forgetPassword-title{
+  font-size: 40px;
+  text-align: center;
+  margin: 30px 0 0 0;
+  padding: auto;
+}
+
+.forgetPassword-button{
+    width: 32%;
+    padding: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    top: 20px;
+}
+
+.forgetPassword-form-group{
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.otp-title{
+  text-align: center;
+  margin-top: -30px;
 }
