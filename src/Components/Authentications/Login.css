@@ -179,3 +179,16 @@ input {
   text-align: center;
   margin-top: -30px;
 }
+.top-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background-color: red;
+  transition: width 0.1s linear;
+}
+
+
+.top-loader.loading {
+  width: 100%;
+}
