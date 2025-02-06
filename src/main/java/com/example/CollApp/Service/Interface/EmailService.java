@@ -40,6 +40,12 @@ public class EmailService implements IEmailService {
         if (user == null) {
             throw new UsernameNotFoundException("Please use valid Email.");
         }
+
+        ForgetPassword forgetPassword = user.getForgetPassword();
+        if (forgetPassword != null) {
+            user.setForgetPassword(null);
+            userRepository.save(user);
+        }
         int otp = otpGenerator();
         MailBody mailBody = MailBody.builder()
                 .to(email)
@@ -106,6 +112,10 @@ public class EmailService implements IEmailService {
         if (user == null) {
             throw new UsernameNotFoundException("Please use valid Email.");
         }
+
+        System.out.println(email);
+        System.out.println(changeUserPassword.getPassword());
+        System.out.println(changeUserPassword.getConfirmPassword());
         String hashedPassword = passwordEncoder.encode(changeUserPassword.getPassword());
         user.setPassword(hashedPassword);
         userRepository.save(user);

@@ -6,18 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
 public class ChangeUserPassword {
     private String Password;
+    private String ConfirmPassword;
 
-    public String getConfirmPassword() {
-        return ConfirmPassword;
+    public ChangeUserPassword() {
     }
-
-    public void setConfirmPassword(String confirmPassword) {
-        ConfirmPassword = confirmPassword;
+    public ChangeUserPassword(String Password, String ConfirmPassword) {
+        this.Password = Password;
+        this.ConfirmPassword = ConfirmPassword;
     }
 
     public String getPassword() {
@@ -28,5 +27,11 @@ public class ChangeUserPassword {
         Password = password;
     }
 
-    private String ConfirmPassword;
+    public String getConfirmPassword() {
+        return ConfirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        ConfirmPassword = confirmPassword;
+    }
 }

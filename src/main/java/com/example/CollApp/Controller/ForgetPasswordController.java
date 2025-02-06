@@ -40,7 +40,7 @@ public class ForgetPasswordController {
     @PostMapping("/change-password/{email}")
     public ResponseEntity<String> changePassword(@RequestBody ChangeUserPassword changeUserPassword, @PathVariable String email) {
         if(!Objects.equals(changeUserPassword.getPassword(), changeUserPassword.getConfirmPassword())){
-            return new ResponseEntity<>("Please enter password Correctly.", HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>("Please enter password Correctly.", HttpStatus.BAD_REQUEST);
         }
         return emailService.changePassword(changeUserPassword, email);
     }
