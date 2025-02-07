@@ -1,19 +1,13 @@
 package com.example.CollApp.Controller;
 
 import com.example.CollApp.DTO.ChangeUserPassword;
-import com.example.CollApp.DTO.MailBody;
-import com.example.CollApp.Model.ForgetPassword;
-import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.UserRepository;
-import com.example.CollApp.Service.Interface.EmailService;
+import com.example.CollApp.Service.Interface.Implementation.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
 
 @RestController
 @RequestMapping("/collapp/auth")

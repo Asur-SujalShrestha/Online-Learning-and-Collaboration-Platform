@@ -1,4 +1,4 @@
-package com.example.CollApp.Service.Interface;
+package com.example.CollApp.Service.Interface.Implementation;
 
 import com.example.CollApp.DTO.ChangeUserPassword;
 import com.example.CollApp.DTO.MailBody;
@@ -6,7 +6,7 @@ import com.example.CollApp.Model.ForgetPassword;
 import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.ForgetPasswordRepository;
 import com.example.CollApp.Repository.UserRepository;
-import com.example.CollApp.Service.Interface.Implementation.IEmailService;
+import com.example.CollApp.Service.Interface.IEmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Random;
 
 @Service

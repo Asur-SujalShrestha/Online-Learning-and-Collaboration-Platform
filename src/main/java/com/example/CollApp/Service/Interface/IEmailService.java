@@ -1,4 +1,4 @@
-package com.example.CollApp.Service.Interface.Implementation;
+package com.example.CollApp.Service.Interface;
 
 import com.example.CollApp.DTO.MailBody;
 
