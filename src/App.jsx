@@ -5,9 +5,13 @@ import './App.css'
 import VideoStream from './Components/VideoStream'
 import Login from './Components/Authentications/Login'
 import { Toaster } from "react-hot-toast";
+import Home from './Components/Pages/Home'
+import Header from './Components/Pages/Header'
+import Profile from './Components/Pages/Profile'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
@@ -23,7 +27,17 @@ function App() {
             color: '#fff',
           },
         }} />
-      <Login/>
+      {/* <Login/> */}
+      {/* <Home/> */}
+      {/* <Profile /> */}
+      <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path='/home' element={<Home/>}/>
+                <Route path="/profile" element={<Profile />} />
+            </Routes>
+        </BrowserRouter>
+
     </>
   )
 }

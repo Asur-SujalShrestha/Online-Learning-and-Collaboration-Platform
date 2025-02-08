@@ -1,0 +1,160 @@
+ h2, p{
+    margin: 0;
+}
+
+.header-section{
+    position:fixed;
+    width:100%;
+}
+.main-container{
+    display: flex;
+    flex-direction: column;
+}
+.container{
+    display: flex;
+    margin-top:78px;
+    flex-direction: row;
+}
+.profile-container {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    width: 50%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -11%;
+  }
+  
+  .profile-picture {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  .post-box {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .input-box {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .upload-btn {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-group {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .details-btn, .upload-pic-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    flex: 1;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .love-btn{
+    background-color: rgb(241, 78, 78);
+  }
+  .comment-btn{
+    background-color: gray;
+  }
+  .post {
+    margin: 20px 0 0 0;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .user-info h4 {
+    margin: 0 0 4px 0;
+  }
+  .user-info p{
+    text-align: start
+  }
+  
+  .post-content {
+    margin-top: 10px;
+    text-align: left;
+    padding-left: 50px;
+  }
+  
+  .post-image {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+.left-section{
+    flex: 1;
+}  
+.right-section{
+    flex: 1;
+}
+.cover-photo{
+    max-height: 250px;
+    height: 100%;
+    background-color: #555;
+}
+.cover-photo img{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+.profile-photo{
+    height: 160px;
+    background-color: gray;
+    width: 160px;
+    border-radius: 50%;
+}
+.avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

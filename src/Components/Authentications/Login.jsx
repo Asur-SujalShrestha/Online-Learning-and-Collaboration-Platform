@@ -157,7 +157,7 @@ const Login = () => {
       <div className="login-container">
         <div className="login-left">
           <img
-            src="src/assets/login.png"
+            src="src/assets/images/login.png"
             alt="CollApp background"
             className="background-image"
           />
@@ -168,7 +168,7 @@ const Login = () => {
             <>
               <h2 className="login-title">Sign in</h2>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <img src="src/assets/loginPerson1.jpg" alt="login" style={{ width: "175px" }} />
+                <img src="src/assets/images/loginPerson1.jpg" alt="login" style={{ width: "175px" }} />
               </div>
               <form onSubmit={submitLoginForm}>
                 <div className="form-group">
@@ -213,7 +213,7 @@ const Login = () => {
             <>
               <h2 className="forgetPassword-title">Forgot Your Password</h2>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <img src="src/assets/forgetPassword.jpg" alt="Forget Password" style={{ width: "300px" }} />
+                <img src="src/assets/images/forgetPassword.jpg" alt="Forget Password" style={{ width: "300px" }} />
               </div>
               <form onSubmit={submitForgotPassword}>
                 <div className="forgetPassword-form-group">
@@ -243,7 +243,7 @@ const Login = () => {
             <>
               <h2 className="otp-title">OTP Verification</h2>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <img src="src/assets/email_OTP.jpg" alt="OTP Verification" style={{ width: "250px" }} />
+                <img src="src/assets/images/email_OTP.jpg" alt="OTP Verification" style={{ width: "250px" }} />
               </div>
               <form onSubmit={verifyOtp}>
                 <div className="otp-form-group">

@@ -1,0 +1,46 @@
+.subtitle {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.friends-list,
+.groups-list {
+    list-style: none;
+    padding: 0;
+}
+
+.friend-item,
+.group-item {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+    background-color: gray;
+    border-radius: 50%;
+    margin-right: 10px;
+    overflow: hidden;
+    background-position: center;
+    background-size: cover;
+}
+
+.avatar img {
+    width: 100%;
+
+}
+.sidebar {
+    width: 20%;
+    background-color: #333333;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+}
+
+.left-sidebar {
+    left: 0;
+}
