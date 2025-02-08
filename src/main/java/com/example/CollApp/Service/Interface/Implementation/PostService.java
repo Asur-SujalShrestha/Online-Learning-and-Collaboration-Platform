@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PostService implements IPostService {
@@ -55,5 +57,18 @@ public class PostService implements IPostService {
         post.setUser(user);
         postRepository.save(post);
         return ResponseEntity.ok("Post Uploaded Successfully");
+    }
+
+    @Override
+    public ResponseEntity<String> deletePost(long id) {
+        Optional<Posts> post = postRepository.findById(id);
+        post.ifPresent(postRepository::delete);
+        return ResponseEntity.ok("Post Deleted Successfully");
+    }
+
+    @Override
+    public List<Posts> getAllPost() {
+        return postRepository.findAll();
+
     }
 }

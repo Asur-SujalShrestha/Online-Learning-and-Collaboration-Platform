@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("collapp/posts")
+@CrossOrigin("http://localhost:5173")
 public class PostsController {
 
     private final PostService postService;
@@ -21,5 +24,15 @@ public class PostsController {
     @PostMapping("/save/social-media/{email}")
     public ResponseEntity<String> SavePost(@PathVariable String email, @RequestPart("postData") PostDTO posts, @RequestParam("media") MultipartFile file) {
         return postService.savePost(email, posts, file);
+    }
+
+    @DeleteMapping("/delete/social-media/{id}")
+    public ResponseEntity<String> DeletePost(@PathVariable long id) {
+        return postService.deletePost(id);
+    }
+
+    @GetMapping("/get-all/social-media")
+    public List<Posts> GetAllPosts() {
+        return postService.getAllPost();
     }
 }

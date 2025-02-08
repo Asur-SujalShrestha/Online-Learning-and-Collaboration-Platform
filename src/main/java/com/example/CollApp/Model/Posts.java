@@ -1,5 +1,8 @@
 package com.example.CollApp.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,10 +13,12 @@ import java.sql.Date;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Posts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = true)
     private String fileUrl;
     private Date date;
     private String caption;
@@ -22,6 +27,7 @@ public class Posts {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "uploadedBy", nullable = false)
+    @JsonManagedReference
     private Users user;
 
     public Posts() {
