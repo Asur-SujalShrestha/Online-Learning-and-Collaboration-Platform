@@ -78,6 +78,7 @@ public class JwtTokenProvider implements Serializable {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("id", user.getId())
                 .claim("Email", user.getEmail())
                 .claim("DOB", user.getDob().toString())
                 .claim("Full Name", user.getFirstName() + " " + user.getLastName())

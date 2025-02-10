@@ -1,6 +1,7 @@
 package com.example.CollApp.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class Users  {
     private LocalDate dob;
     private String email;
     private String address;
+    @JsonIgnore
     private String password;
     private String role;
     private String profilePic;
