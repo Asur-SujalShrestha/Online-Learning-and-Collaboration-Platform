@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.css";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [step, setStep] = useState("login"); // Possible values: "login", "forgotPassword", "otpVerification"
@@ -13,6 +14,7 @@ const Login = () => {
   const [newConfirmPassword, setNewConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   if (loading) {
@@ -40,6 +42,7 @@ const Login = () => {
       setProgress(100);
       setLoading(false);
       setProgress(0);
+      navigate("/home");
     } catch (error) {
       console.log("Login Failed");
       toast.error(error.response?.data ?? "Login Failed");

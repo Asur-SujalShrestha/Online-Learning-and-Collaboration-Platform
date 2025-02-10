@@ -7,10 +7,15 @@ import { CiHeart } from "react-icons/ci";
 import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { FaArrowRight } from "react-icons/fa6";
+import { jwtDecode } from "jwt-decode";
+
+
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
     const [error, setError] = useState(null);
+    const [push, setPush] = useState(false);
+    const [email, setEmail] = useState("");
     useEffect(() => {
         const fetchData = async () => {
             const URL = `${import.meta.env.VITE_API_POSTS}/get-all/social-media`
@@ -22,9 +27,51 @@ const Home = () => {
                 setError(err.message);
                 console.log(err.message);
             }
+            console.log(getDecodedToken());
         };
         fetchData();
-    }, []);
+    }, [push]);
+
+    const getDecodedToken = () => {
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        if (token) {
+            try {
+                // Decode the token
+                const decoded = jwtDecode(token); // Decode the token
+                console.log(`this decode: ${decoded}`); // The decoded token payload
+                setEmail(decoded.Email);
+                return decoded;
+            } catch (error) {
+                console.error('Failed to decode token:', error);
+                return null;
+            }
+        } else {
+            console.log('No token found in localStorage');
+            return null;
+        }
+    };
+
+
+    const likePost = async (postId) => {
+        const decodedToken = getDecodedToken(); // Get user info from JWT
+    
+        if (!decodedToken || !decodedToken.id) {
+            console.error("User ID is missing from the decoded token!");
+            return;
+        }
+    
+        const URL = `${import.meta.env.VITE_APT_LIKEPOST}/${postId}/${decodedToken.id}`;
+        console.log("Request URL:", URL); // Debugging URL
+    
+        try {
+            const response = await axios.post(URL);
+            setPush(!push);
+            console.log( response.data);
+        } catch (error) {
+            console.error("Error liking post:", error.response?.data );
+        }
+    };
+    
 
     return (
         <div>
@@ -54,7 +101,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <p className="post-content">
-                                <FaArrowRight />{post.caption}
+                                    <FaArrowRight />{post.caption}
                                 </p>
                                 <img
                                     src={post.fileUrl}
@@ -62,7 +109,7 @@ const Home = () => {
                                     className="post-image"
                                 />
                                 <div className="button-group">
-                                    <button className="details-btn love-btn">{post.likeCount == 0 ?'Like':post.likeCount}<CiHeart style={{ fontSize: "18px" }} /></button>
+                                    <button style={{ backgroundColor: post.likes.some(like => like.users.email === email) ? "red" : "gray" }}  onClick={() => likePost(post.id) } className="details-btn love-btn">{post.likes.length == 0 ? 'Like' : post.likes.length}<CiHeart style={{ fontSize: "18px" }} /></button>
                                     <button className="upload-pic-btn comment-btn">Comment <FaRegComment /></button>
                                 </div>
                             </div>
