@@ -71,4 +71,13 @@ public class PostService implements IPostService {
         return postRepository.findAll();
 
     }
+
+    @Override
+    public Posts getPost(long id) {
+        Posts post = postRepository.findById(id).get();
+        if (post == null) {
+            throw new RuntimeException("Post Not Found");
+        }
+        return post;
+    }
 }

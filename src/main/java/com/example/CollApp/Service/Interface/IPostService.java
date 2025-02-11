@@ -11,4 +11,6 @@ public interface IPostService {
     public ResponseEntity<String> savePost(String email, PostDTO post, MultipartFile file);
     public ResponseEntity<String> deletePost(long id);
     public List<Posts> getAllPost();
+
+    Posts getPost(long id);
 }

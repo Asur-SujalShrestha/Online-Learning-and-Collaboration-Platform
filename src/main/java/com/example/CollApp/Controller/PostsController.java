@@ -31,6 +31,12 @@ public class PostsController {
         return postService.deletePost(id);
     }
 
+    //http://localhost:8081/collapp/posts/get-post/3
+    @GetMapping("/get-post/{id}")
+    public Posts getPost(@PathVariable long id) {
+        return postService.getPost(id);
+    }
+
     @GetMapping("/get-all/social-media")
     public List<Posts> GetAllPosts() {
         return postService.getAllPost();

@@ -36,6 +36,10 @@ public class Posts {
     @JsonManagedReference
     private List<PostLikes> likes;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PostComments> comments;
+
     public Posts() {
     }
 
