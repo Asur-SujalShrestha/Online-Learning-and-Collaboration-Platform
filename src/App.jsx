@@ -9,6 +9,7 @@ import Home from './Components/Pages/Home'
 import Header from './Components/Pages/Header'
 import Profile from './Components/Pages/Profile'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostDetail from './Components/Pages/PostDetail'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -36,6 +37,7 @@ function App() {
                 <Route path='/home' element={<Home/>}/>
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/postDetail/:postId" element={<PostDetail/>}/>
             </Routes>
         </BrowserRouter>
 

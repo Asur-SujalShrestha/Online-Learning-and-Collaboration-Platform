@@ -8,6 +8,7 @@ import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { FaArrowRight } from "react-icons/fa6";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -16,6 +17,7 @@ const Home = () => {
     const [error, setError] = useState(null);
     const [push, setPush] = useState(false);
     const [email, setEmail] = useState("");
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
             const URL = `${import.meta.env.VITE_API_POSTS}/get-all/social-media`
@@ -72,6 +74,9 @@ const Home = () => {
         }
     };
     
+    const goToPostDetails = (postId) => {
+        navigate(`/postDetail/${postId}`); // Redirect to PostPage with postId
+    };
 
     return (
         <div>
@@ -110,40 +115,10 @@ const Home = () => {
                                 />
                                 <div className="button-group">
                                     <button style={{ backgroundColor: post.likes.some(like => like.users.email === email) ? "red" : "gray" }}  onClick={() => likePost(post.id) } className="details-btn love-btn">{post.likes.length == 0 ? 'Like' : post.likes.length}<CiHeart style={{ fontSize: "18px" }} /></button>
-                                    <button className="upload-pic-btn comment-btn">Comment <FaRegComment /></button>
+                                    <button onClick={()=>goToPostDetails(post.id)} className="upload-pic-btn comment-btn">{post.comments.length == 0 ? 'Comment' : post.comments.length}<FaRegComment /></button>
                                 </div>
                             </div>
                         ))}
-
-                        {/* <div className="post">
-                            <div className="post-header">
-                                <div className='avatar'>
-                                    <img
-                                        src="src\assets\images\mainPage1.png"
-                                        alt="User"
-                                        className="user-avatar"
-                                    />
-                                </div>
-                                <div className="user-info">
-                                    <h4>Sujan Shrestha</h4>
-                                    <p>2069-09-25</p>
-                                </div>
-                            </div>
-                            <p className="post-content">
-                                Happy Dashain to all the students and staff of the college. Happy Dashain to all the
-                                students and staff of the college. Happy Dashain to all the students and staff of the
-                                college.
-                            </p>
-                            <img
-                                src="src\assets\images\mainPage1.png"
-                                alt="Post"
-                                className="post-image"
-                            />
-                            <div className="button-group">
-                                <button className="details-btn love-btn">Like <CiHeart style={{ fontSize: "18px" }} /></button>
-                                <button className="upload-pic-btn comment-btn">Comment <FaRegComment /></button>
-                            </div>
-                        </div> */}
                     </div>
 
 
