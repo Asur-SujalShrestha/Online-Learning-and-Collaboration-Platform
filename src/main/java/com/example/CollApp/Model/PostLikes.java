@@ -15,7 +15,7 @@ public class PostLikes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("post-like")
     private Posts posts;
 
     @ManyToOne(fetch = FetchType.LAZY)

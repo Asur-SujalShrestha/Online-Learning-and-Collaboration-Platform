@@ -27,17 +27,18 @@ public class Posts {
     @Column(nullable = true)
     private int likeCount;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "uploadedBy", nullable = false)
-    @JsonManagedReference
+    @JsonBackReference("usersPost")
     private Users user;
 
+
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("post-like")
     private List<PostLikes> likes;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("post-comment")
     private List<PostComments> comments;
 
     public Posts() {

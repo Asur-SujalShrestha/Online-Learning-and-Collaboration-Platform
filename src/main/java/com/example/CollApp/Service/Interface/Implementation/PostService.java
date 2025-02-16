@@ -62,7 +62,10 @@ public class PostService implements IPostService {
     @Override
     public ResponseEntity<String> deletePost(long id) {
         Optional<Posts> post = postRepository.findById(id);
-        post.ifPresent(postRepository::delete);
+        if(post.isEmpty()){
+            return new ResponseEntity<>("Post Not Found", HttpStatus.NOT_FOUND);
+        }
+        postRepository.deleteById(id);
         return ResponseEntity.ok("Post Deleted Successfully");
     }
 
