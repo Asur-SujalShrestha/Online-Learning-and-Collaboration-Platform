@@ -29,7 +29,7 @@ public class Posts {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "uploadedBy", nullable = false)
-    @JsonBackReference("usersPost")
+    @JsonManagedReference("usersPost")
     private Users user;
 
 
