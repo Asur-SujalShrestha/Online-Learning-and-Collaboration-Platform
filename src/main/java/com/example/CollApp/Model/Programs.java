@@ -1,5 +1,6 @@
 package com.example.CollApp.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -15,6 +16,10 @@ public class Programs {
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("program-members")
     private List<ProgramMembers> members;
+
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("program-assignment")
+    private List<Assignments> assignments;
 
     public Programs() {
     }

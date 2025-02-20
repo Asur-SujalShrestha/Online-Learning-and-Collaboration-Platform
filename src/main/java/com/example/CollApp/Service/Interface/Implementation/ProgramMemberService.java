@@ -36,6 +36,10 @@ public class ProgramMemberService implements IProgramMemberService {
         if (programs.isEmpty()) {
             return new ResponseEntity<>("Program not found", HttpStatus.NOT_FOUND);
         }
+        Optional<ProgramMembers> programMember = programMemberRepository.findByProgramAndUser(programs.get(), user.get());
+        if (programMember.isPresent()) {
+            return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
+        }
         ProgramMembers newMember = new ProgramMembers();
         newMember.setUser(user.orElse(null));
         newMember.setProgram(programs.orElse(null));
