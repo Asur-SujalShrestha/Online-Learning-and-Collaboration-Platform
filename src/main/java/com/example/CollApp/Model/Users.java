@@ -43,7 +43,7 @@ public class Users  {
     private ForgetPassword forgetPassword;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonBackReference("usersPost")
+    @JsonIgnore
     private List<Posts> posts;
 
 

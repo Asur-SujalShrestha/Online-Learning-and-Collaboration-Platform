@@ -15,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Posts {
     @Id
@@ -29,7 +30,6 @@ public class Posts {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "uploadedBy", nullable = false)
-    @JsonManagedReference("usersPost")
     private Users user;
 
 
@@ -44,14 +44,6 @@ public class Posts {
     public Posts() {
     }
 
-    public Posts(long id, String fileUrl, Date date, String caption, int likeCount, Users user) {
-        this.id = id;
-        this.fileUrl = fileUrl;
-        this.date = date;
-        this.caption = caption;
-        this.likeCount = likeCount;
-        this.user = user;
-    }
 
     public long getId() {
         return id;

@@ -32,8 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->{
                         auth.requestMatchers("/collapp/users/register", "/collapp/users/login", "/collapp/auth/**", "/collapp/posts/**", "/collapp/post-like/**", "/collapp/post-comment/**"
                                 ,"/collapp/program/**", "/collapp/program-member/**", "/collapp/group/**", "/collapp/group-member/**",
-                                        "/collapp/assignment/**").permitAll()
-                                .requestMatchers("/collapp/users/all-user").hasRole("ADMIN")
+                                        "/collapp/assignment/**","/collapp/users/all-user").permitAll()
                                 .anyRequest().authenticated();})
                 .exceptionHandling((ex)->ex.authenticationEntryPoint(unauthorizedEntryPoint))
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

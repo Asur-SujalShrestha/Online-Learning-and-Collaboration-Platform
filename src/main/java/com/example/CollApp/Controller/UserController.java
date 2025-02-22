@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collapp/users")
+@CrossOrigin
 public class UserController {
     private final IUserService userService;
     private final AuthService authService;
@@ -45,6 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/all-user")
+    @CrossOrigin("http://localhost:5173")
     public List<Users> getAllUsers() {
         return userService.getAllUsers();
     }

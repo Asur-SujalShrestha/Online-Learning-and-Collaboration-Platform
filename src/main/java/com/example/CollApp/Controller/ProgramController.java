@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collapp/program")
+@CrossOrigin
 public class ProgramController {
 
     private final ProgramService programService;
