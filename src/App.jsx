@@ -10,6 +10,8 @@ import Header from './Components/Pages/Header'
 import Profile from './Components/Pages/Profile'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PostDetail from './Components/Pages/PostDetail'
+import Program from './Components/Pages/Program'
+import ProgramDetail from './Components/Pages/ProgramDetail'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -38,6 +40,8 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/postDetail/:postId" element={<PostDetail/>}/>
+                <Route path='/program' element={<Program />} />
+                <Route path="/programDetail/:programName" element={<ProgramDetail />} />
             </Routes>
         </BrowserRouter>
 

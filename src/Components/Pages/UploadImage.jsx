@@ -45,9 +45,9 @@ const UploadImage = () => {
                 },
             });
             toast.success(response.data);
+            navigate("/profile");
             setImage(null);
             setCaption("");
-            navigate("/profile");
     
         } catch (error) {
             console.error("Error uploading image:", error);

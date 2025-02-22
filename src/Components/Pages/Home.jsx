@@ -90,8 +90,8 @@ const Home = () => {
                         <LeftAside />
                     </div>
                     <div className="profile-containers">
-                        {posts.map((post) => (
-                            <div className="post" key={post.key}>
+                        {posts.map((post, index) => (
+                            <div className="home-post" key={index}>
                                 <div className="post-header">
                                     <div className='avatar'>
                                         <img

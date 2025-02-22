@@ -1,18 +1,47 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
 
 function RightAside() {
+    const [listProgram, setListProgram] = useState([]);
+    useEffect(() => {
+        const fetchProgram = async () => {
+            const URL = `${import.meta.env.VITE_API_PROGRAM}/getPrograms`;
+            const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
+            try {
+                const response = await axios.get(URL, {
+                    headers:{
+                        Authorization:`Bearer ${token}`
+                    }
+                });
+                setListProgram(response.data);
+            }
+            catch (error) {
+                toast.error(error.response?.data || "An error occurred");
+            }
+        };
+
+        fetchProgram();
+    }, []);
     return (
         <div>
             <div className="sidebar right-sidebar">
-                <h2 className="subtitle">Groups</h2>
+                <h2 className="subtitle">Programs</h2>
                 <ul className="groups-list">
-                    {["Data and Web", "Advance Programming", "Advance Database", "AI"].map(
+                    {
+                        listProgram.map((program, index)=>(
+                            <li className="group-item" key={index}>
+                                <div className="avatar"></div>{program.name}
+                            </li>
+                        ))
+                    }
+                    {/* {["Data and Web", "Advance Programming", "Advance Database", "AI"].map(
                         (group, index) => (
                             <li key={index} className="group-item">
                                 <div className="avatar"></div>{group}
                             </li>
                         )
-                    )}
+                    )} */}
                 </ul>
             </div>
         </div>

@@ -10,6 +10,7 @@ import { CiHeart } from "react-icons/ci";
 import { FaRegComment } from "react-icons/fa";
 import "../CSS/PostDetail.css"
 import { jwtDecode } from "jwt-decode";
+import PostNotFound from './PostNotFound';
 
 const PostDetail = () => {
 
@@ -28,7 +29,6 @@ const PostDetail = () => {
                 setLoading(false);
                 console.log("Response Data:", response.data);
             } catch (error) {
-                toast.error(error.response?.data ?? "Something went wrong");
                 setLoading(false);
             }
         };
@@ -36,7 +36,7 @@ const PostDetail = () => {
     }, [postId, push]);
 
     if (loading) return <p>Loading...</p>;
-    if (!post) return <p>Post not found</p>;
+    if (!post) return <PostNotFound />;
 
     const getDecodedToken = () => {
         const token = localStorage.getItem('token'); // Retrieve the token from localStorage

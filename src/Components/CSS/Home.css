@@ -170,9 +170,9 @@ body {
   .comment-btn{
     background-color: gray;
   }
-  .post {
-    margin: 20px 0 0 0;
-    background: #f9f9f9;
+  .home-post {
+    margin: 20px 0;
+    background: #eeeeee;
     padding: 15px;
     border-radius: 10px;
   }
@@ -209,6 +209,7 @@ body {
     width: 100%;
     margin-top: 10px;
     border-radius: 5px;
+    mix-blend-mode: darken;
     max-width: 300px;
     object-fit: contain;
   }

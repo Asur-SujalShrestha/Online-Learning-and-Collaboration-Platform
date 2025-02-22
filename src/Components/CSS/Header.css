@@ -40,10 +40,13 @@
     align-items: center;
   }
   
-  .icon {
+  .icons {
+    width: 50px;
     font-size: 20px;
     margin-right: 15px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
   
   .profile {
@@ -55,4 +58,8 @@
     height: 30px;
     background-color: gray;
     border-radius: 50%;
+  }
+  .logo-title{
+    color: #fff;
+    text-decoration: none;
   }
