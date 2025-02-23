@@ -37,4 +37,15 @@ public class ProgramController {
     public ResponseEntity<List<ProgramDTO>> getPrograms() {
         return programService.getAllPrograms();
     }
+    //http://localhost:8081/collapp/program/getPrograms/7
+    @GetMapping("/getPrograms-userId/{userId}")
+    public ResponseEntity<List<ProgramDTO>> getProgram(@PathVariable long userId) {
+        return programService.getProgramByUserId(userId);
+    }
+
+    //http://localhost:8081/collapp/program/getPrograms-programId/1
+    @GetMapping("/getPrograms/{programId}")
+    public ResponseEntity<List<ProgramDTO>> getProgramByProgramId(@PathVariable long programId) {
+        return programService.getProgramByProgramId(programId);
+    }
 }

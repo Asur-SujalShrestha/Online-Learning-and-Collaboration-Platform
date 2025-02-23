@@ -2,7 +2,9 @@ package com.example.CollApp.Service.Interface.Implementation;
 
 import com.example.CollApp.DTO.ProgramDTO;
 import com.example.CollApp.Model.Programs;
+import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.ProgramRepository;
+import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IProgramService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class ProgramService implements IProgramService {
     private final ProgramRepository programRepository;
+    private final UserRepository userRepository;
 
-    public ProgramService(ProgramRepository programRepository) {
+    public ProgramService(ProgramRepository programRepository, UserRepository userRepository) {
         this.programRepository = programRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,6 +41,24 @@ public class ProgramService implements IProgramService {
     @Override
     public ResponseEntity<List<ProgramDTO>> getAllPrograms() {
         List<ProgramDTO> programDTOs = programRepository.findAll().stream()
+                .map(ProgramDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(programDTOs);
+    }
+
+    @Override
+    public ResponseEntity<List<ProgramDTO>> getProgramByUserId(long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found"));
+        List<ProgramDTO> programDTOS = programRepository.findByUser(user).stream()
+                .map(ProgramDTO::new)
+                        .collect(Collectors.toList());
+        return ResponseEntity.ok(programDTOS);
+    }
+
+    @Override
+    public ResponseEntity<List<ProgramDTO>> getProgramByProgramId(long programId) {
+        List<ProgramDTO> programDTOs = programRepository.findById(programId).stream()
                 .map(ProgramDTO::new)
                 .collect(Collectors.toList());
 

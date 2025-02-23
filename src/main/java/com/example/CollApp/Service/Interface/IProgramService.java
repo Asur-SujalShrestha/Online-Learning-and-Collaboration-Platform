@@ -13,4 +13,8 @@ public interface IProgramService {
     ResponseEntity<String> deleteProgram(long programId);
 
     ResponseEntity<List<ProgramDTO>> getAllPrograms();
+
+    ResponseEntity<List<ProgramDTO>> getProgramByUserId(long userId);
+
+    ResponseEntity<List<ProgramDTO>> getProgramByProgramId(long userId);
 }

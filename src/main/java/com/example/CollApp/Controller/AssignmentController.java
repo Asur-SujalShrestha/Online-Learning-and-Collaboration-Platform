@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collapp/assignment")
+@CrossOrigin
 public class AssignmentController {
     private final AssignmentService assignmentService;
 
@@ -36,6 +37,7 @@ public class AssignmentController {
         return assignmentService.getAllAssignment();
     }
 
+    //http://localhost:8081/collapp/assignment/get-assignment/1
     @GetMapping("/get-assignment/{programId}")
     public ResponseEntity<List<Assignments>> getAssignment(@PathVariable long programId) {
         return assignmentService.getAssignment(programId);
