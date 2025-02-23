@@ -41,7 +41,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/postDetail/:postId" element={<PostDetail/>}/>
                 <Route path='/program' element={<Program />} />
-                <Route path="/programDetail/:programName" element={<ProgramDetail />} />
+                <Route path="/programDetail/:programId" element={<ProgramDetail />} />
             </Routes>
         </BrowserRouter>
 
