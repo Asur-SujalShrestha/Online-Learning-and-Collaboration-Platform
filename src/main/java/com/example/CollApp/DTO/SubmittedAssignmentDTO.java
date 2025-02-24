@@ -14,5 +14,7 @@ public class SubmittedAssignmentDTO {
     private long userId;
     private String review;
     private String Grade;
-    private Date date;
+    private Date uploadedDate;
+    private String description;
+    private long programId;
 }

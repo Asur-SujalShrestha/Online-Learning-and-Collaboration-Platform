@@ -27,12 +27,18 @@ public class SubmittedAssignments {
     @JoinColumn(name = "UserId")
     private Users user;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "programId")
+    private Programs program;
+
     @Column(nullable = true)
     private String review;
     @Column(nullable = true)
     private String Grade;
     @Column(nullable = true)
     private Date date;
+    @Column(nullable = true)
+    private String description;
 
     @OneToMany(mappedBy = "submittedAssignments", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonManagedReference("submittedAssignmentFile")

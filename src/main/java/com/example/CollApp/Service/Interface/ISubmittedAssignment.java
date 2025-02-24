@@ -12,4 +12,6 @@ public interface ISubmittedAssignment {
     ResponseEntity<String> addSubmittedAssignment(SubmittedAssignmentDTO submittedAssignmentDTO, List<MultipartFile> file) throws IOException;
 
     ResponseEntity<List<SubmittedAssignments>> getSubmittedAssignment(long assignmentId);
+
+    ResponseEntity<List<SubmittedAssignments>> getSubmittedAssignmentByProgram(long programId);
 }
