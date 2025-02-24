@@ -92,4 +92,44 @@
         width: 97%;
     
   }
+  .file-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.file-input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.add-file-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    float: right;
+}
+
+.add-file-btn svg {
+    margin-right: 5px;
+}
+
+.add-file-btn:hover {
+    background: #0056b3;
+}
+.file-upload{
+  margin-bottom: 10px;
+}
+
+
   

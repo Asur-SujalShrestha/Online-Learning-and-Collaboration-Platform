@@ -12,18 +12,19 @@ import { useParams } from 'react-router-dom';
 import Assignment from './Assignment';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import SubmittedAssignment from './SubmittedAssignment';
 
 function ProgramDetail() {
     const { programId } = useParams();
     const [step, setStep] = useState("1");
     const [programDetail, setProgramDetail] = useState(null);
     const [assignmentDetail, setAssignmentDetail] = useState(null);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const fetchProgram = async () => {
             const URL = `${import.meta.env.VITE_API_PROGRAM}/getPrograms/${programId}`;
             const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
-
             try {
                 const response = await axios.get(URL, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -42,28 +43,32 @@ function ProgramDetail() {
     }, [programId]);
 
     useEffect(() => {
-        const fetchAssignment = async () => {
-            const URL = `${import.meta.env.VITE_API_ASSIGNMENT}/get-assignment/2`;
-            const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
-    
-            try {
-                const response = await axios.get(URL, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                if (response.data.length > 0) {
-                    setAssignmentDetail(response.data);
-                } else {
-                    toast.error("No assignments found");
-                }
-            } catch (error) {
-                toast.error(error.response?.data || "An error occurred");
-            }
-        };
+        
     
         fetchAssignment();
-    }, [programId]);  // Add `token` if it might change dynamically
-    
+    }, [programId, refresh]); 
 
+    const fetchAssignment = async () => {
+        const URL = `${import.meta.env.VITE_API_ASSIGNMENT}/get-assignment/${programId}`;
+        const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
+
+        try {
+            const response = await axios.get(URL, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.length > 0) {
+                setAssignmentDetail(response.data);
+            } else {
+                toast.error("No assignments found");
+            }
+        } catch (error) {
+            toast.error(error.response?.data || "An error occurred");
+        }
+    };
+
+    const handleNewAssignment = () => {
+        fetchAssignment();  // Re-fetch assignments when a new assignment is added
+    };
 
     return (
         <>
@@ -74,7 +79,7 @@ function ProgramDetail() {
                         <ProgramSideMenu step={step} setStep={setStep} />
                     </div>
 
-                    {step === "1" ? (
+                    {step === "1" && (
                         <div className="chat-section">
                             <div className="chat-header">
                                 <div className='avatar-title'>
@@ -125,8 +130,14 @@ function ProgramDetail() {
                                 <IoIosSend className="send-icon" />
                             </div>
                         </div>
-                    ) : (
-                        <Assignment assignmentDetail={assignmentDetail}/>
+                    )} 
+                    {step === "3" && (
+                        
+                        <Assignment assignmentDetail={assignmentDetail} programDetail={programDetail} onNewAssignment={handleNewAssignment}/>
+                    )}
+
+                    {step === "4" &&(
+                        <SubmittedAssignment programId={programId} programDetail={programDetail}/>
                     )}
                 </div>
             </div>

@@ -1,0 +1,48 @@
+.submitted-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    overflow-y: scroll;
+  }
+  
+  .submitted-heading {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .assignment-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-left: 5px solid #007bff;
+  }
+  
+  .assignment-title {
+    color: #007bff;
+    margin-bottom: 5px;
+  }
+  
+  .assignment-desc {
+    font-style: italic;
+    color: #666;
+  }
+  
+  .file-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .file-link:hover {
+    text-decoration: underline;
+  }
+  .submitted{
+    padding: 7px 10px;
+    background-color: gray;
+    border-radius: 3px;
+  }
+  
+  
