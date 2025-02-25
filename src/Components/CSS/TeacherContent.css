@@ -1,0 +1,12 @@
+.assignment-headers {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    gap: 10px;
+}
+.back-buttons{
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}

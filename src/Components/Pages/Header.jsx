@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode"; // Ensure this is imported
 import "../CSS/Header.css";
 import { MdGroups } from "react-icons/md";
 import { Link, Links, useNavigate } from "react-router-dom";
+import { AiFillMessage } from "react-icons/ai";
 
 function Header() {
   const [userName, setUserName] = useState("");
@@ -33,7 +34,7 @@ function Header() {
           <input type="text" placeholder="Search..." className="search-input" />
         </div>
         <div className="header-icons">
-          <span className="icons">💬</span>
+          <span className="icons"><AiFillMessage /></span>
           <span className="icons"><MdGroups onClick={navigateProgram} style={{fontSize:"24px"}}/></span>
           <span className="icons">🔔</span>
           <Link className="logo-title" to="/login"><span className="profile">Hi, {userName || "Guest"}</span></Link>

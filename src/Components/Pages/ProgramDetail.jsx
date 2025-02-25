@@ -13,6 +13,7 @@ import Assignment from './Assignment';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import SubmittedAssignment from './SubmittedAssignment';
+import TeacherContents from './TeacherContents';
 
 function ProgramDetail() {
     const { programId } = useParams();
@@ -131,6 +132,9 @@ function ProgramDetail() {
                             </div>
                         </div>
                     )} 
+                    {step === "2" && (
+                        <TeacherContents programId = {programId} programDetail={programDetail} />
+                    )}
                     {step === "3" && (
                         
                         <Assignment assignmentDetail={assignmentDetail} programDetail={programDetail} onNewAssignment={handleNewAssignment}/>

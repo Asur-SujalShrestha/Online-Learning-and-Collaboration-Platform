@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PostDetail from './Components/Pages/PostDetail'
 import Program from './Components/Pages/Program'
 import ProgramDetail from './Components/Pages/ProgramDetail'
+import TeacherContentDetail from './Components/Pages/TeacherContentDetail'
 
 function App() {
   const [count, setCount] = useState(0);
