@@ -7,6 +7,7 @@ import com.example.CollApp.Model.*;
 import com.example.CollApp.Repository.*;
 import com.example.CollApp.Service.Interface.ISubmittedAssignment;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
