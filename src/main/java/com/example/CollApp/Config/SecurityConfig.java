@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,12 +28,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.csrf((AbstractHttpConfigurer::disable))
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
                         auth.requestMatchers("/collapp/users/register", "/collapp/users/login", "/collapp/auth/**", "/collapp/posts/**", "/collapp/post-like/**", "/collapp/post-comment/**"
                                 ,"/collapp/program/**", "/collapp/program-member/**", "/collapp/group/**", "/collapp/group-member/**",
-                                        "/collapp/assignment/**","/collapp/users/all-user", "/collapp/submitted-assignment/**", "/collapp/teacher-content/**").permitAll()
+                                        "/collapp/assignment/**","/collapp/users/all-user", "/collapp/submitted-assignment/**", "/collapp/teacher-content/**",
+                                        "/ws/**", "/collapp/get-messages").permitAll()
                                 .anyRequest().authenticated();})
                 .exceptionHandling((ex)->ex.authenticationEntryPoint(unauthorizedEntryPoint))
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
