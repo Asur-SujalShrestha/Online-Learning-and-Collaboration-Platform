@@ -26,6 +26,7 @@ function RightAside() {
     return (
         <div>
             <div className="sidebar right-sidebar">
+                <div>
                 <h2 className="subtitle">Programs</h2>
                 <ul className="groups-list">
                     {
@@ -35,14 +36,9 @@ function RightAside() {
                             </li>
                         ))
                     }
-                    {/* {["Data and Web", "Advance Programming", "Advance Database", "AI"].map(
-                        (group, index) => (
-                            <li key={index} className="group-item">
-                                <div className="avatar"></div>{group}
-                            </li>
-                        )
-                    )} */}
+                    
                 </ul>
+                </div>
             </div>
         </div>
     )

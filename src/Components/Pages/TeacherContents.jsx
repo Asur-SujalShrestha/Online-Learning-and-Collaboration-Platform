@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { FaPlus } from "react-icons/fa6";
-import AssignmentForm from './AssignmentForm';
-import SubmitAssignmentForm from './SubmitAssignmentForm';
 import { IoCall } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
-import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { CiFolderOn } from "react-icons/ci";
-import "../CSS/TeacherContent.css"
-import { Link } from 'react-router-dom';
+import "../CSS/TeacherContent.css";
 import TeacherContentDetail from './TeacherContentDetail';
+import TeacherContentForm from './TeacherContentForm';
+import { jwtDecode } from 'jwt-decode';
 
 function TeacherContents({ programId, programDetail }) {
     const [contentDetail, setContentDetail] = useState(null);
     const [step, setStep] = useState("1");
     const [contentId, setContentId] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+
+    const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
+    const userId = token ? jwtDecode(token).id : null;
+
     useEffect(() => {
-        const fetchContent = async () => {
-            const URL = `${import.meta.env.VITE_API_TEACHER_CONTENT}/get-content/program/${programId}`;
-            const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
-            try {
-                const response = await axios.get(URL, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setContentDetail(response.data);
-            }
-            catch (error) {
-                toast.error(error.response.data);
-            }
-        }
+        
 
         fetchContent();
-    }, [])
+    }, []);
+
+    const fetchContent = async () => {
+        const URL = `${import.meta.env.VITE_API_TEACHER_CONTENT}/get-content/program/${programId}`;
+        try {
+            const response = await axios.get(URL, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setContentDetail(response.data);
+        }
+        catch (error) {
+            toast.error(error.response.data);
+        }
+    }
+
+    const refreshContent=()=>{
+        fetchContent();
+    }
+
     return (
         <div className="chat-section">
             <div className="chat-header">
@@ -59,7 +68,7 @@ function TeacherContents({ programId, programDetail }) {
                 {contentDetail?.length > 0 ? (
                     <div className="assignments-list">
                         {contentDetail.map((content, index) => (
-                            <div onClick={()=>{setContentId(content.id); console.log(content.id); setStep("2")}} key={index} className="assignment-card">
+                            <div onClick={() => { setContentId(content.id); setStep("2"); }} key={index} className="assignment-card">
                                 <div className="assignment-headers">
                                     <CiFolderOn style={{ fontSize: "30px" }} /><h3>{content.title}</h3>
                                 </div>
@@ -70,16 +79,15 @@ function TeacherContents({ programId, programDetail }) {
                     <p>No contents available.</p>
                 )}
 
-                <button className="add-assignment-btn">
+                <button className="add-assignment-btn" onClick={() => setShowForm(true)}>
                     Add content <FaPlus className='chat-icon' />
                 </button>
 
-                {/* {showForm && <AssignmentForm onClose={() => setShowForm(false)} id={programId} userId={userId} onNewAssignment={onNewAssignment} />}
-                {showSubmitForm && <SubmitAssignmentForm assignmentId={selectedAssignmentId} selectedAssignmentTitle={selectedAssignmentTitle} programId={programId} userId={userId} onClose={() => setShowSubmitForm(false)} />} */}
+                {showForm && <TeacherContentForm onClose={() => setShowForm(false)} userId={userId} programId={programId} refreshContent={refreshContent}/>}
             </div>)}
-            {step === "2" && (<TeacherContentDetail contentId={contentId} setStep = {setStep}/>)}
+            {step === "2" && (<TeacherContentDetail contentId={contentId} setStep={setStep} />)}
         </div>
-    )
+    );
 }
 
-export default TeacherContents
+export default TeacherContents;

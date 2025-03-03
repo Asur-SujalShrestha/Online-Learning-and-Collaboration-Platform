@@ -1,0 +1,108 @@
+.chat-container {
+    width: 100%;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .search-icon {
+    font-size: 18px;
+    color: #666;
+    cursor: pointer;
+  }
+  
+  .chat-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  
+  .chat-tabs button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .chat-tabs button.active {
+    color: #000;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+  }
+  
+  .chat-list {
+    overflow-y: auto;
+  }
+  
+  .chat-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f1f1f1;
+    position: relative;
+  }
+  
+  .chat-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .chat-info {
+    flex: 1;
+    text-align: start;
+  }
+  
+  .chat-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .chat-message {
+    font-size: 14px;
+    color: #666;
+    margin: 2px 0 0;
+  }
+  
+  .chat-badge {
+    background: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 5px 10px;
+    position: absolute;
+    right: 15px;
+  }
+  
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    left: 40px;
+    bottom: 10px;
+  }
+  
+  .status-dot.online {
+    background: green;
+  }
+  
+  .status-dot.offline {
+    background: gray;
+  }
+  

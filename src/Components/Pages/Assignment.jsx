@@ -43,6 +43,10 @@ function Assignment({ assignmentDetail, programDetail, onNewAssignment }) {
         setShowSubmitForm(true);
     };
 
+    const getDownloadableUrl = (fileUrl) => {
+        return fileUrl.replace("/upload/", "/upload/fl_attachment/");
+      };
+
     return (
         <div className="chat-section">
             <div className="chat-header">
@@ -84,7 +88,7 @@ function Assignment({ assignmentDetail, programDetail, onNewAssignment }) {
                                                 const fileName = file.fileUrl.split('/').pop();
                                                 return (
                                                     <div key={index} className="attachment">
-                                                        <a style={{ color: "black", textDecoration: "none" }} href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
+                                                        <a style={{ color: "black", textDecoration: "none" }} href={getDownloadableUrl(file.fileUrl)} download target="_blank" rel="noopener noreferrer">
                                                             {fileName}
                                                         </a>
                                                     </div>

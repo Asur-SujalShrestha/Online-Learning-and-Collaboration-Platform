@@ -13,6 +13,8 @@ import PostDetail from './Components/Pages/PostDetail'
 import Program from './Components/Pages/Program'
 import ProgramDetail from './Components/Pages/ProgramDetail'
 import TeacherContentDetail from './Components/Pages/TeacherContentDetail'
+import Notes from './Components/Pages/Notes'
+import ChatList from './Components/Pages/ChatList'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -43,6 +45,8 @@ function App() {
                 <Route path="/postDetail/:postId" element={<PostDetail/>}/>
                 <Route path='/program' element={<Program />} />
                 <Route path="/programDetail/:programId" element={<ProgramDetail />} />
+                <Route path="/note" element={<Notes />} />
+                <Route path="/chat" element={<ChatList />} />
             </Routes>
         </BrowserRouter>
 
