@@ -3,7 +3,9 @@ package com.example.CollApp.Service.Interface.Implementation;
 import com.example.CollApp.DTO.GroupDTO;
 import com.example.CollApp.DTO.ProgramDTO;
 import com.example.CollApp.Model.Groups;
+import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.GroupRepository;
+import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IGroupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class GroupService implements IGroupService {
     private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, UserRepository userRepository) {
         this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -39,4 +43,6 @@ public class GroupService implements IGroupService {
         groupRepository.delete(group);
         return ResponseEntity.ok("Group Deleted");
     }
+
+
 }

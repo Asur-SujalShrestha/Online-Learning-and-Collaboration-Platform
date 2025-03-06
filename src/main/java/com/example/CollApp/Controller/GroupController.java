@@ -22,11 +22,13 @@ public class GroupController {
     public ResponseEntity<String> addNewGroup(@RequestBody Groups group) {
         return groupService.addNewGroup(group);
     }
-
+    //http://localhost:8081/collapp/group/get-all-group
     @GetMapping("/get-all-group")
     public ResponseEntity<List<GroupDTO>> getAllGroups() {
         return groupService.getAllGroups();
     }
+
+
 
     @DeleteMapping("/delete/{groupId}")
     public ResponseEntity<String> deleteGroup(@PathVariable long groupId) {

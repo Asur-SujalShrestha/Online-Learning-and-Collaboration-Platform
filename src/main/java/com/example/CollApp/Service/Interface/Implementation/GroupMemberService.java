@@ -1,5 +1,6 @@
 package com.example.CollApp.Service.Interface.Implementation;
 
+import com.example.CollApp.DTO.GroupDTO;
 import com.example.CollApp.DTO.GroupMemberDTO;
 import com.example.CollApp.Model.GroupMembers;
 import com.example.CollApp.Model.Groups;
@@ -12,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupMemberService implements IGroupMemberService {
@@ -45,5 +48,17 @@ public class GroupMemberService implements IGroupMemberService {
         groupMemberRepository.save(saveMember);
         return ResponseEntity.ok("Memeber Added Successfully");
 
+    }
+
+    @Override
+    public ResponseEntity<List<Groups>> getGroupByUserId(long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User Not Found"));
+        List<Groups> groups = groupMemberRepository.findByUser(user)
+                .stream()
+                .map(GroupMembers::getGroup)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 }

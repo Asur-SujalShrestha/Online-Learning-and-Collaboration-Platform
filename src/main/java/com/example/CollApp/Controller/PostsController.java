@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("collapp/posts")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin
 public class PostsController {
 
     private final PostService postService;

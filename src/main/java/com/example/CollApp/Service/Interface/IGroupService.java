@@ -12,4 +12,5 @@ public interface IGroupService {
     ResponseEntity<List<GroupDTO>> getAllGroups();
 
     ResponseEntity<String> deleteGroup(long groupId);
+
 }

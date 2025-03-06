@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/collapp/auth")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin
 public class ForgetPasswordController {
     private final EmailService emailService;
 

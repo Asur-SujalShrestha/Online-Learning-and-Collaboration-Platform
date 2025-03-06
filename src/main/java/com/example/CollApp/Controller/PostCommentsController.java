@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/collapp/post-comment")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin
 public class PostCommentsController {
     private final PostCommentsService postCommentsService;
 

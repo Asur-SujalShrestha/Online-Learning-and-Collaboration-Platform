@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/collapp/post-like")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin
 public class PostLikesController {
 
     private final PostLikesService postLikesService;
