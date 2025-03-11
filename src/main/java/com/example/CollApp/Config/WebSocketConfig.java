@@ -1,7 +1,7 @@
 package com.example.CollApp.Config;
 
 import com.example.CollApp.Service.Interface.Implementation.UserService;
-import org.slf4j.Logger;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -32,7 +32,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
-    private Logger log;
 
     public WebSocketConfig(JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -42,19 +41,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/user", "/topic"); // Enable brokers for private & public messages
-        config.setApplicationDestinationPrefixes("/collapp"); // Messages sent with this prefix will be routed to controllers
-        config.setUserDestinationPrefix("/user"); // Enables private messaging
+        config.enableSimpleBroker("/user", "/topic");
+        config.setApplicationDestinationPrefixes("/collapp");
+        config.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/ws")
+////                .addInterceptors(new WebSocketAuthInterceptor(jwtTokenProvider, userDetailsService)) // Apply Interceptor
+//                .setAllowedOriginPatterns("http://localhost:5173")
+//                .withSockJS();
         registry.addEndpoint("/ws")
-//                .addInterceptors(new WebSocketAuthInterceptor(jwtTokenProvider, userDetailsService)) // Apply Interceptor
-                .setAllowedOriginPatterns("http://localhost:5173")
-                .withSockJS();
-        registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("http://localhost:5173");
+                .setAllowedOriginPatterns("*");
     }
 
 
@@ -65,7 +64,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor =
                         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                log.info("Headers: {}", accessor);
+
 
                 assert accessor != null;
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {

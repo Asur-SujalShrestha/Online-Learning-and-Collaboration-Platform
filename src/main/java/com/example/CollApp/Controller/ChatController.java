@@ -7,8 +7,11 @@ import com.example.CollApp.Service.Interface.Implementation.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,20 +22,29 @@ public class ChatController {
     private final ChatService chatService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatController(ChatService chatService, SimpMessagingTemplate brokerMessagingTemplate) {
+    public ChatController(ChatService chatService, SimpMessagingTemplate messagingTemplate) {
         this.chatService = chatService;
-        this.messagingTemplate = brokerMessagingTemplate;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @MessageMapping("/private-message")
-    public void sendPrivateMessage(@RequestBody ChatDTO chatDTO) {
+    public void sendPrivateMessage(@Payload ChatDTO chatDTO) {
         Users receiver = chatService.saveChat(chatDTO);
-        messagingTemplate.convertAndSendToUser(receiver.getFirstName() + receiver.getId(), "/private", chatDTO);
+        messagingTemplate.convertAndSendToUser(
+                 receiver.getId().toString(), // Unique user destination
+                "/queue/messages",
+                chatDTO
+        );
     }
 
-
+    //http://localhost:8081/collapp/get-messages
     @GetMapping("/collapp/get-messages")
-    public ResponseEntity<List<Chats>> getMessages(@RequestParam long senderId , @RequestParam long receiverId) {
+    public ResponseEntity<List<Chats>> getMessages(@RequestParam long senderId, @RequestParam long receiverId) {
         return new ResponseEntity<>(chatService.getMessage(senderId, receiverId), HttpStatus.OK);
+    }
+
+    @PostMapping("/collapp/upload-image")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        return chatService.uploadImage(file);
     }
 }

@@ -27,9 +27,9 @@ public class Chats {
     private String message;
     private MessageType status;
 
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private LocalDateTime timestamp;
 
     public enum MessageType {
-        JOIN, MESSAGE, LEAVE
+        JOIN, MESSAGE, LEAVE, IMAGE, FILE
     }
 }
