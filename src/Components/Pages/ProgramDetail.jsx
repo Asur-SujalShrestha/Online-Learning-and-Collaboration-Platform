@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import SubmittedAssignment from './SubmittedAssignment';
 import TeacherContents from './TeacherContents';
+import ProgramChat from './ProgramChat';
 
 function ProgramDetail() {
     const { programId } = useParams();
@@ -80,58 +81,7 @@ function ProgramDetail() {
                         <ProgramSideMenu step={step} setStep={setStep} />
                     </div>
 
-                    {step === "1" && (
-                        <div className="chat-section">
-                            <div className="chat-header">
-                                <div className='avatar-title'>
-                                    <img 
-                                        src={programDetail?.members?.[0]?.user.profilePic !== "null" &&
-                                             programDetail?.members?.[0]?.user.profilePic !== "none"
-                                             ? programDetail?.members?.[0]?.user.profilePic 
-                                             : ""} 
-                                        alt="Profile" 
-                                        className="profile-pic" 
-                                    />
-                                    <h2>{programDetail?.name || "Loading..."}</h2>
-                                </div>
-
-                                <div className='call-list'>
-                                    <IoCall className='call' />
-                                    <FaVideo className='call' />
-                                    <HiDotsVertical className='call' />
-                                </div>
-                            </div>
-
-                            <div className="chat-messages">
-                                <div className="message left">
-                                    <img src="" alt="User" className="message-pic" />
-                                    <div className="message-box left-box">Hello, how are you?</div>
-                                </div>
-
-                                <div className="message right">
-                                    <div className="message-box right-box">I'm good, what about you?</div>
-                                    <img src="" alt="User" className="message-pic" />
-                                </div>
-
-                                <div className="message left">
-                                    <img src="" alt="User" className="message-pic" />
-                                    <div className="message-box left-box">I need help with the assignment.</div>
-                                </div>
-
-                                <div className="message right">
-                                    <div className="message-box right-box">Sure, let's discuss it.</div>
-                                    <img src="" alt="User" className="message-pic" />
-                                </div>
-                            </div>
-
-                            <div className="chat-input">
-                                <FaPlus className='chat-icon' />
-                                <HiOutlinePhoto className='chat-icon' />
-                                <input type="text" placeholder="Type a message..." />
-                                <IoIosSend className="send-icon" />
-                            </div>
-                        </div>
-                    )} 
+                    {step === "1" && <ProgramChat programId = {programId} programDetail={programDetail} />} 
                     {step === "2" && (
                         <TeacherContents programId = {programId} programDetail={programDetail} />
                     )}

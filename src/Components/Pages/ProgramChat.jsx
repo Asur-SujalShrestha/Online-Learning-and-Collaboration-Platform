@@ -1,52 +1,53 @@
-import React, { useEffect, useRef, useState } from "react";
-import { IoArrowBackSharp } from "react-icons/io5";
-import { IoIosSend } from "react-icons/io";
+import { useEffect, useRef, useState } from "react";
 import WebSocketService from "../Services/WebSocketService";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { IoIosSend } from "react-icons/io";
 import "../CSS/Chats.css";
+import { jwtDecode } from "jwt-decode";
+import { IoCall } from "react-icons/io5";
+import { FaPlus, FaVideo } from "react-icons/fa";
+import { HiDotsVertical } from "react-icons/hi";
+import { HiOutlinePhoto } from "react-icons/hi2";
 
-function GroupChats({ group, onBack }) {
+function ProgramChat({ programId, programDetail }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
     const userId = token ? jwtDecode(token).id : null;
     const senderProfile = token ? jwtDecode(token).profilePic : null;
-    const firstName = token ? jwtDecode(token).firstName : null;
-
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const messageEndRef = useRef(null);
 
     useEffect(() => {
         setMessages([]);
-    
-        // Fetch past group messages
-        const fetchGroupMessages = async () => {
+        console.log(programId);
+
+        // Fetch past program messages
+        const fetchProgramMessages = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8081/collapp/get-group-messages/${group.id}`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }
+                    `http://localhost:8081/collapp/get-program-messages/${programId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
                 );
                 setMessages(response.data);
                 scrollToBottom();
             } catch (error) {
-                console.error("Error fetching group messages:", error);
+                console.error("Error fetching program messages:", error);
             }
         };
-    
-        fetchGroupMessages();
-    
-        // ✅ Now using connectToGroup instead of manual subscription
-        WebSocketService.connectToGroup(group.id, (message) => {
+
+        fetchProgramMessages();
+
+        // ✅ Connect to WebSocket for program messages
+        WebSocketService.connectToProgram(programId, (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
             scrollToBottom();
         });
-    
+
         return () => {
             WebSocketService.disconnect(); // Clean up WebSocket connection
         };
-    }, [group.id]);
-    
+    }, [programId]);
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -59,13 +60,13 @@ function GroupChats({ group, onBack }) {
 
         const newMessage = {
             senderId: userId,
-            groupId: group.id,
+            groupId: programId,
             message: messageInput,
             timestamp: new Date().toISOString(),
             status: "MESSAGE",
         };
 
-        WebSocketService.sendGroupMessage(group.id, newMessage);
+        WebSocketService.sendProgramMessage(programId, newMessage);
         if (newMessage.senderId !== userId) {
             setMessages((prevMessages) => [...prevMessages, message]);
         }
@@ -74,21 +75,25 @@ function GroupChats({ group, onBack }) {
     };
 
     return (
-        <div className="chat-containers">
+        <div className="chat-section">
             <div className="chat-section-main">
                 <div className="chat-header">
-                    <div className="avatar-title">
-                        <button className="back-buttons" onClick={onBack}>
-                            <IoArrowBackSharp
-                                style={{
-                                    color: "#fff",
-                                    fontSize: "24px",
-                                    padding: "0 7px 0 0",
-                                }}
-                            />
-                        </button>
-                        <div className="group-avatar">G</div>
-                        <h3 style={{ margin: "0" }}>{group.name}</h3>
+                    <div className='avatar-title'>
+                        <img
+                            src={programDetail?.members?.[0]?.user.profilePic !== "null" &&
+                                programDetail?.members?.[0]?.user.profilePic !== "none"
+                                ? programDetail?.members?.[0]?.user.profilePic
+                                : ""}
+                            alt="Profile"
+                            className="profile-pic"
+                        />
+                        <h2>{programDetail?.name || "Loading..."}</h2>
+                    </div>
+
+                    <div className='call-list'>
+                        <IoCall className='call' />
+                        <FaVideo className='call' />
+                        <HiDotsVertical className='call' />
                     </div>
                 </div>
 
@@ -121,6 +126,8 @@ function GroupChats({ group, onBack }) {
                 </div>
 
                 <div className="chat-input">
+                    <FaPlus className='chat-icon' />
+                    <HiOutlinePhoto className='chat-icon' />
                     <input
                         type="text"
                         placeholder="Type a message..."
@@ -134,4 +141,4 @@ function GroupChats({ group, onBack }) {
     );
 }
 
-export default GroupChats;
+export default ProgramChat;

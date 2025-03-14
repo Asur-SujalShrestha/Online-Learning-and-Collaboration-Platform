@@ -50,6 +50,29 @@ class WebSocketService {
         }
     }
 
+    connectToProgram(programId, onProgramMessageReceived) {
+        if (this.client && this.client.connected) {
+            this.subscribeToProgram(programId, onProgramMessageReceived);
+        } else {
+            console.log(`🔌 Connecting to WebSocket for Program chat...${programId}`);
+            this.client = new Client({
+                brokerURL: SOCKET_URL,
+                connectHeaders: {
+                    Authorization: `Bearer ${token}`,
+                },
+                onConnect: () => {
+                    console.log("✅ Connected to WebSocket (Program)");
+                    this.subscribeToProgram(programId, onProgramMessageReceived);
+                },
+                onStompError: (frame) => {
+                    console.error("❌ WebSocket error:", frame);
+                },
+            });
+    
+            this.client.activate();
+        }
+    }
+    
     subscribeToPrivateMessages(userId, firstName, onMessageReceived) {
         const destination = `/user/${userId}/queue/messages`;
         this.client.subscribe(destination, (message) => {
@@ -96,12 +119,50 @@ class WebSocketService {
         });
     }
     
-
+    subscribeToProgram(programId, onGroupMessageReceived) {
+        if (!this.client || !this.client.connected) {
+            console.error("🚨 WebSocket not connected! Retrying...");
+            setTimeout(() => this.subscribeToProgram(programId, onGroupMessageReceived), 1000);
+            return;
+        }
+    
+        if (!this.groupSubscriptions) {
+            this.groupSubscriptions = {}; // Ensure it's initialized
+        }
+    
+        if (this.groupSubscriptions[programId]) {
+            console.log(`✅ Already subscribed to group ${programId}`);
+            return;
+        }
+    
+        const destination = `/program/${programId}`;
+        this.client.subscribe(destination, (message) => {
+            try {
+                const parsedMessage = JSON.parse(message.body);
+                console.log("📩 Received Program Message:", parsedMessage);
+                onGroupMessageReceived(parsedMessage);
+            } catch (error) {
+                console.error("Error parsing message body:", error);
+            }
+        });
+    }
 
     sendGroupMessage(groupId, message) {
         if (this.client && this.client.connected) {
             this.client.publish({
                 destination: "/collapp/group-message",
+                body: JSON.stringify(message),
+            });
+            console.log("📤 Group Message Sent:", message);
+        } else {
+            console.error("❌ WebSocket is not connected. Cannot send message.");
+        }
+    }
+
+    sendProgramMessage(programId, message){
+        if (this.client && this.client.connected) {
+            this.client.publish({
+                destination: "/collapp/program-message",
                 body: JSON.stringify(message),
             });
             console.log("📤 Group Message Sent:", message);
