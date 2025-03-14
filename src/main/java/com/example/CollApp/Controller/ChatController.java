@@ -1,7 +1,9 @@
 package com.example.CollApp.Controller;
 
 import com.example.CollApp.DTO.ChatDTO;
+import com.example.CollApp.DTO.GroupChatDTO;
 import com.example.CollApp.Model.Chats;
+import com.example.CollApp.Model.GroupChats;
 import com.example.CollApp.Model.Users;
 import com.example.CollApp.Service.Interface.Implementation.ChatService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,20 @@ public class ChatController {
                 chatDTO
         );
     }
+
+    @MessageMapping("/group-message")
+    public void sendGroupMessage(@Payload GroupChatDTO groupChatDTO) {
+        chatService.saveGroupChat(groupChatDTO);
+        String destination = "/topic/group/" + groupChatDTO.getGroupId();
+        System.out.println("📢 Broadcasting to group: " + destination);
+
+        messagingTemplate.convertAndSend(destination, groupChatDTO);
+    }
+    @GetMapping("/collapp/get-group-messages/{groupId}")
+    public ResponseEntity<List<GroupChats>> getGroupMessages(@PathVariable long groupId) {
+        return new ResponseEntity<>(chatService.getGroupMessages(groupId), HttpStatus.OK);
+    }
+
 
     //http://localhost:8081/collapp/get-messages
     @GetMapping("/collapp/get-messages")

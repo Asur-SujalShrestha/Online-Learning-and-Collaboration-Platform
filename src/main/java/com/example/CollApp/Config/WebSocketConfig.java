@@ -41,7 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/user", "/topic");
+        config.enableSimpleBroker("/user", "/topic"); // "/topic" will handle group messages
         config.setApplicationDestinationPrefixes("/collapp");
         config.setUserDestinationPrefix("/user");
     }
