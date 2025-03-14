@@ -4,14 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.CollApp.DTO.ChatDTO;
 import com.example.CollApp.DTO.GroupChatDTO;
-import com.example.CollApp.Model.Chats;
-import com.example.CollApp.Model.GroupChats;
-import com.example.CollApp.Model.Groups;
-import com.example.CollApp.Model.Users;
-import com.example.CollApp.Repository.ChatRepository;
-import com.example.CollApp.Repository.GroupChatRepository;
-import com.example.CollApp.Repository.GroupRepository;
-import com.example.CollApp.Repository.UserRepository;
+import com.example.CollApp.Model.*;
+import com.example.CollApp.Repository.*;
 import com.example.CollApp.Service.Interface.IChatService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +23,17 @@ public class ChatService implements IChatService {
     private final Cloudinary cloudinary;
     private final GroupRepository groupRepository;
     private final GroupChatRepository groupChatRepository;
+    private final ProgramRepository programRepository;
+    private final ProgarmChatRepository progarmChatRepository;
 
-    public ChatService(UserRepository userRepository, ChatRepository chatRepository, @Qualifier("cloudinary") Cloudinary cloudinary, GroupRepository groupRepository, GroupChatRepository groupChatRepository) {
+    public ChatService(UserRepository userRepository, ChatRepository chatRepository, @Qualifier("cloudinary") Cloudinary cloudinary, GroupRepository groupRepository, GroupChatRepository groupChatRepository, ProgramRepository programRepository, ProgarmChatRepository progarmChatRepository) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.cloudinary = cloudinary;
         this.groupRepository = groupRepository;
         this.groupChatRepository = groupChatRepository;
+        this.programRepository = programRepository;
+        this.progarmChatRepository = progarmChatRepository;
     }
 
     @Override
@@ -92,5 +90,25 @@ public class ChatService implements IChatService {
         catch (Exception e){
             throw new RuntimeException("Image upload failed");
         }
+    }
+
+    @Override
+    public void saveProgramChat(GroupChatDTO groupChatDTO) {
+        Users user = userRepository.findById(groupChatDTO.getSenderId()).orElseThrow(()-> new RuntimeException("User not found"));
+        Programs program = programRepository.findById(groupChatDTO.getGroupId()).orElseThrow(()-> new RuntimeException("Program not found"));
+
+        ProgramChats programChats = ProgramChats.builder()
+                .sender(user)
+                .program(program)
+                .message(groupChatDTO.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        progarmChatRepository.save(programChats);
+    }
+
+    @Override
+    public List<ProgramChats> getProgramMessages(long programId) {
+        Programs program = programRepository.findById(programId).orElseThrow(()-> new RuntimeException("Program not found"));
+        return progarmChatRepository.findByProgramOrderByTimestampAsc(program);
     }
 }

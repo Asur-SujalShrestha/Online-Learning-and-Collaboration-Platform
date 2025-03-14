@@ -34,7 +34,8 @@ public class SecurityConfig {
                         auth.requestMatchers("/collapp/users/register", "/collapp/users/login", "/collapp/auth/**", "/collapp/posts/**", "/collapp/post-like/**", "/collapp/post-comment/**"
                                 ,"/collapp/program/**", "/collapp/program-member/**", "/collapp/group/**", "/collapp/group-member/**",
                                         "/collapp/assignment/**","/collapp/users/all-user", "/collapp/submitted-assignment/**", "/collapp/teacher-content/**",
-                                        "/ws/**", "/collapp/get-messages", "/collapp/note/**", "/collapp/upload-image", "/collapp/get-group-messages/**").permitAll()
+                                        "/ws/**", "/collapp/get-messages", "/collapp/note/**", "/collapp/upload-image", "/collapp/get-group-messages/**",
+                                        "/collapp/get-program-messages/**").permitAll()
                                 .anyRequest().authenticated();})
                 .exceptionHandling((ex)->ex.authenticationEntryPoint(unauthorizedEntryPoint))
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

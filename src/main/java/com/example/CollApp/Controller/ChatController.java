@@ -4,6 +4,7 @@ import com.example.CollApp.DTO.ChatDTO;
 import com.example.CollApp.DTO.GroupChatDTO;
 import com.example.CollApp.Model.Chats;
 import com.example.CollApp.Model.GroupChats;
+import com.example.CollApp.Model.ProgramChats;
 import com.example.CollApp.Model.Users;
 import com.example.CollApp.Service.Interface.Implementation.ChatService;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,19 @@ public class ChatController {
 
         messagingTemplate.convertAndSend(destination, groupChatDTO);
     }
+
+    @MessageMapping("/program-message")
+    public void sendProgramMessage(@Payload GroupChatDTO groupChatDTO) {
+        chatService.saveProgramChat(groupChatDTO);
+        String destination = "/program/" + groupChatDTO.getGroupId();
+        messagingTemplate.convertAndSend(destination, groupChatDTO);
+    }
+
+    @GetMapping("/collapp/get-program-messages/{programId}")
+    public ResponseEntity<List<ProgramChats>> getProgramMessages(@PathVariable long programId) {
+        return new ResponseEntity<>(chatService.getProgramMessages(programId), HttpStatus.OK);
+    }
+
     @GetMapping("/collapp/get-group-messages/{groupId}")
     public ResponseEntity<List<GroupChats>> getGroupMessages(@PathVariable long groupId) {
         return new ResponseEntity<>(chatService.getGroupMessages(groupId), HttpStatus.OK);
