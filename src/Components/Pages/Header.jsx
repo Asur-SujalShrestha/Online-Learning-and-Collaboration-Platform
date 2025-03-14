@@ -10,6 +10,7 @@ import { MdStickyNote2 } from "react-icons/md";
 function Header() {
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,7 +18,8 @@ function Header() {
     if (token) {
       try {
         const decoded = jwtDecode(token); 
-        setUserName(decoded["Full Name"] || decoded.Email); // Use `sub` as a fallback
+        setUserName(decoded["Full Name"] || decoded.Email);
+        setProfilePic(decoded.profilePic)
       } catch (error) {
         console.error("Failed to decode token:", error);
       }
@@ -49,7 +51,7 @@ function Header() {
           <span className="icons"><MdStickyNote2  onClick={navigateNotes} style={{fontSize:"24px"}}/></span>
           <span className="icons"><IoMdNotifications style={{fontSize:"24px"}}/></span>
           <Link className="logo-title" to="/login"><span className="profile">Hi, {userName || "Guest"}</span></Link>
-          <div className="profile-avatar"></div>
+          <div className="profile-avatar"><img src={profilePic} alt="" className="profilepic"/></div>
         </div>
       </div>
     </div>

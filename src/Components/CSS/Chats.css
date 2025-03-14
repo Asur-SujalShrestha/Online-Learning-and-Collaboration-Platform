@@ -18,3 +18,122 @@
     background-color: white;
     border-left: 1px solid #ccc;
 }
+
+/* Default styles for message container */
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* For the current user's messages */
+.message.right {
+    justify-content: flex-end;
+}
+
+.message.right .message-box {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+    margin-left: 10px;
+}
+
+.message.right .Profile-pic.right {
+    margin-left: 10px;
+    object-fit: cover;
+}
+
+/* For the other user's messages */
+.message.left {
+    justify-content: flex-start;
+}
+
+.message.left .message-box {
+    background-color: gray;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+    margin-right: 10px;
+}
+
+.message.left .Profile-pic.left {
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+/* Profile picture styling */
+.Profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+/* Adjust the profile picture alignment */
+.Profile-pic.left {
+    margin-right: 10px;
+}
+
+.Profile-pic.right {
+    margin-left: 10px;
+}
+
+/* For message box */
+.message-box {
+    word-wrap: break-word;
+    max-width: 100%;
+}
+.sent-image{
+    width: 300px;
+}
+
+
+
+/* File Upload Popup */
+.file-preview-modal {
+    position: fixed;
+    bottom: 50px;
+    left: 34%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.file-preview-modal p {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.file-preview-modal button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background: black;
+    color: white;
+}
+
+.file-preview-modal button:first-child {
+    background-color: #0078ff;
+    color: white;
+}
+
+.file-preview-modal button:last-child {
+    background-color: #6c6c6c;
+}
+
+.file-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+

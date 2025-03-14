@@ -8,16 +8,17 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
 import Chats from "./Chats"; // Import Chats component
+import GroupChats from "./GroupChats"; // Import GroupChats component
 
 const ChatList = () => {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
     const userId = token ? jwtDecode(token).id : null;
 
-    const [activeTab, setActiveTab] = useState("users"); 
+    const [activeTab, setActiveTab] = useState("users");
     const [userList, setUserList] = useState([]);
     const [groupList, setGroupList] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null); // Track selected user
-    const [selectedGroup, setSelectedGroup] = useState(null); // Track selected group
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedGroup, setSelectedGroup] = useState(null);
 
     useEffect(() => {
         fetchUsers();
@@ -67,19 +68,21 @@ const ChatList = () => {
 
                     {/* If a user is selected, show Chats component */}
                     {selectedUser ? (
-                        <Chats user={selectedUser} onBack={() => setSelectedUser(null)} />
+                        <Chats receiver={selectedUser} onBack={() => setSelectedUser(null)} />
+                    ) : selectedGroup ? (
+                        <GroupChats group={selectedGroup} onBack={() => setSelectedGroup(null)} />
                     ) : (
                         <div className="profile-containers">
                             <div className="chat-container">
                                 {/* Tabs */}
                                 <div className="chat-tabs">
-                                    <button 
+                                    <button
                                         className={activeTab === "users" ? "active" : ""}
                                         onClick={() => { setActiveTab("users"); setSelectedUser(null); setSelectedGroup(null); }}
                                     >
                                         Users
                                     </button>
-                                    <button 
+                                    <button
                                         className={activeTab === "groups" ? "active" : ""}
                                         onClick={() => { setActiveTab("groups"); setSelectedUser(null); setSelectedGroup(null); }}
                                     >
@@ -90,15 +93,17 @@ const ChatList = () => {
                                 {/* List Section */}
                                 <div className="chat-list">
                                     {activeTab === "users" &&
-                                        userList.map((user) => (
-                                            <div key={user.id} className="chat-item" onClick={() => setSelectedUser(user)}>
-                                                <img src={user.profilePic !== "null" ? user.profilePic : "/default-avatar.png"} alt={user.firstName} className="chat-avatar" />
-                                                <div className="chat-info">
-                                                    <h4 className="chat-name">{capitalizeFirstLetter(user.firstName) + " " + capitalizeFirstLetter(user.lastName)}</h4>
-                                                    <p className="chat-message">{user.email}</p>
+                                        userList
+                                            .filter(user => user.id !== userId)
+                                            .map((user) => (
+                                                <div key={user.id} className="chat-item" onClick={() => setSelectedUser(user)}>
+                                                    <img src={user.profilePic !== "null" ? user.profilePic : "/default-avatar.png"} alt={user.firstName} className="chat-avatar" />
+                                                    <div className="chat-info">
+                                                        <h4 className="chat-name">{capitalizeFirstLetter(user.firstName) + " " + capitalizeFirstLetter(user.lastName)}</h4>
+                                                        <p className="chat-message">{user.email}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))
+                                            ))
                                     }
 
                                     {activeTab === "groups" &&
