@@ -43,7 +43,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
+    //https://192.168.101.3:8081/collapp/users/all-user
     @GetMapping("/all-user")
     public List<Users> getAllUsers() {
         return userService.getAllUsers();
