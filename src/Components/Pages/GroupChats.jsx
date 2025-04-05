@@ -23,7 +23,7 @@ function GroupChats({ group, onBack }) {
         const fetchGroupMessages = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8081/collapp/get-group-messages/${group.id}`, {
+                    `https://192.168.101.3:8081/collapp/get-group-messages/${group.id}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 );

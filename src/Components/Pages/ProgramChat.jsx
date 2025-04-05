@@ -25,7 +25,7 @@ function ProgramChat({ programId, programDetail }) {
         const fetchProgramMessages = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8081/collapp/get-program-messages/${programId}`, {
+                    `https://192.168.101.3:8081/collapp/get-program-messages/${programId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 }
                 );

@@ -38,7 +38,7 @@ function Chats({ receiver, onBack }) {
 
     const fetchMessages = async () => {
         try {
-            const response = await axios.get(`http://localhost:8081/collapp/get-messages`, {
+            const response = await axios.get(`https://192.168.101.3:8081/collapp/get-messages`, {
                 params: { senderId: userId, receiverId: receiver.id },
             });
             setMessages(response.data);

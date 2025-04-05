@@ -1,6 +1,6 @@
 import { Client } from "@stomp/stompjs";
 
-const SOCKET_URL = "ws://localhost:8081/ws";
+const SOCKET_URL = "wss://192.168.101.3:8081/ws";
 const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
 
 class WebSocketService {
@@ -10,17 +10,17 @@ class WebSocketService {
 
     connect(userId, firstName, onMessageReceived) {
         this.client = new Client({
-            brokerURL: SOCKET_URL, // Use native WebSockets
+            brokerURL: SOCKET_URL, 
             connectHeaders: {
-                Authorization: `Bearer ${token}`, // Attach the JWT token
+                Authorization: `Bearer ${token}`, 
             },
             onConnect: () => {
-                console.log("✅ Connected to WebSocket");
+                console.log("Connected to WebSocket");
                 console.log("🔗 Subscribing to:", `/user/${userId}/queue/messages`);
                 this.subscribeToPrivateMessages(userId, firstName, onMessageReceived);
             },
             onStompError: (frame) => {
-                console.error("❌ WebSocket error:", frame);
+                console.error(" WebSocket error:", frame);
             },
         });
 
@@ -38,11 +38,11 @@ class WebSocketService {
                     Authorization: `Bearer ${token}`,
                 },
                 onConnect: () => {
-                    console.log("✅ Connected to WebSocket (Group)");
+                    console.log("Connected to WebSocket (Group)");
                     this.subscribeToGroup(groupId, onGroupMessageReceived);
                 },
                 onStompError: (frame) => {
-                    console.error("❌ WebSocket error:", frame);
+                    console.error("WebSocket error:", frame);
                 },
             });
 
@@ -61,11 +61,11 @@ class WebSocketService {
                     Authorization: `Bearer ${token}`,
                 },
                 onConnect: () => {
-                    console.log("✅ Connected to WebSocket (Program)");
+                    console.log("Connected to WebSocket (Program)");
                     this.subscribeToProgram(programId, onProgramMessageReceived);
                 },
                 onStompError: (frame) => {
-                    console.error("❌ WebSocket error:", frame);
+                    console.error("WebSocket error:", frame);
                 },
             });
     
@@ -76,7 +76,7 @@ class WebSocketService {
     subscribeToPrivateMessages(userId, firstName, onMessageReceived) {
         const destination = `/user/${userId}/queue/messages`;
         this.client.subscribe(destination, (message) => {
-            console.log("📩 Message received:", JSON.parse(message.body));
+            console.log("Message received:", JSON.parse(message.body));
             onMessageReceived(JSON.parse(message.body));
         });
     }
@@ -87,13 +87,13 @@ class WebSocketService {
                 destination: "/collapp/private-message",
                 body: JSON.stringify(message),
             });
-            console.log("📤 Message sent:", message);
+            console.log("Message sent:", message);
         }
     }
 
     subscribeToGroup(groupId, onGroupMessageReceived) {
         if (!this.client || !this.client.connected) {
-            console.error("🚨 WebSocket not connected! Retrying...");
+            console.error("WebSocket not connected! Retrying...");
             setTimeout(() => this.subscribeToGroup(groupId, onGroupMessageReceived), 1000);
             return;
         }
@@ -103,7 +103,7 @@ class WebSocketService {
         }
     
         if (this.groupSubscriptions[groupId]) {
-            console.log(`✅ Already subscribed to group ${groupId}`);
+            console.log(`Already subscribed to group ${groupId}`);
             return;
         }
     
@@ -111,7 +111,7 @@ class WebSocketService {
         this.client.subscribe(destination, (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
-                console.log("📩 Received Group Message:", parsedMessage);
+                console.log("Received Group Message:", parsedMessage);
                 onGroupMessageReceived(parsedMessage);
             } catch (error) {
                 console.error("Error parsing message body:", error);
@@ -121,7 +121,7 @@ class WebSocketService {
     
     subscribeToProgram(programId, onGroupMessageReceived) {
         if (!this.client || !this.client.connected) {
-            console.error("🚨 WebSocket not connected! Retrying...");
+            console.error("WebSocket not connected! Retrying...");
             setTimeout(() => this.subscribeToProgram(programId, onGroupMessageReceived), 1000);
             return;
         }
@@ -131,7 +131,7 @@ class WebSocketService {
         }
     
         if (this.groupSubscriptions[programId]) {
-            console.log(`✅ Already subscribed to group ${programId}`);
+            console.log(`Already subscribed to group ${programId}`);
             return;
         }
     
@@ -139,7 +139,7 @@ class WebSocketService {
         this.client.subscribe(destination, (message) => {
             try {
                 const parsedMessage = JSON.parse(message.body);
-                console.log("📩 Received Program Message:", parsedMessage);
+                console.log("Received Program Message:", parsedMessage);
                 onGroupMessageReceived(parsedMessage);
             } catch (error) {
                 console.error("Error parsing message body:", error);
@@ -153,9 +153,9 @@ class WebSocketService {
                 destination: "/collapp/group-message",
                 body: JSON.stringify(message),
             });
-            console.log("📤 Group Message Sent:", message);
+            console.log("Group Message Sent:", message);
         } else {
-            console.error("❌ WebSocket is not connected. Cannot send message.");
+            console.error("WebSocket is not connected. Cannot send message.");
         }
     }
 
@@ -165,9 +165,9 @@ class WebSocketService {
                 destination: "/collapp/program-message",
                 body: JSON.stringify(message),
             });
-            console.log("📤 Group Message Sent:", message);
+            console.log("Group Message Sent:", message);
         } else {
-            console.error("❌ WebSocket is not connected. Cannot send message.");
+            console.error("WebSocket is not connected. Cannot send message.");
         }
     }
 

@@ -15,6 +15,9 @@ import ProgramDetail from './Components/Pages/ProgramDetail'
 import TeacherContentDetail from './Components/Pages/TeacherContentDetail'
 import Notes from './Components/Pages/Notes'
 import ChatList from './Components/Pages/ChatList'
+import VideoChat from './Components/Pages/VideoChat'
+import RoomsList from './Components/Pages/RoomsList'
+import Planning from './Components/Pages/Planning'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -44,6 +47,9 @@ function App() {
                 <Route path="/programDetail/:programId" element={<ProgramDetail />} />
                 <Route path="/note" element={<Notes />} />
                 <Route path="/chat" element={<ChatList />} />
+                <Route path="/videocalls" element={<RoomsList />} />
+                <Route path="/videochat/:roomId" element={<VideoChat />} />
+                <Route path="/planning" element={<Planning />} />
             </Routes>
         </BrowserRouter>
 

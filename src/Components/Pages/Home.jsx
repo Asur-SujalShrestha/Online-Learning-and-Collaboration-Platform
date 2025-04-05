@@ -17,6 +17,8 @@ const Home = () => {
     const [error, setError] = useState(null);
     const [push, setPush] = useState(false);
     const [email, setEmail] = useState("");
+    const [selectedImage, setSelectedImage] = useState(null);
+
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
@@ -56,24 +58,24 @@ const Home = () => {
 
     const likePost = async (postId) => {
         const decodedToken = getDecodedToken(); // Get user info from JWT
-    
+
         if (!decodedToken || !decodedToken.id) {
             console.error("User ID is missing from the decoded token!");
             return;
         }
-    
+
         const URL = `${import.meta.env.VITE_APT_LIKEPOST}/${postId}/${decodedToken.id}`;
         console.log("Request URL:", URL); // Debugging URL
-    
+
         try {
             const response = await axios.post(URL);
             setPush(!push);
-            console.log( response.data);
+            console.log(response.data);
         } catch (error) {
-            console.error("Error liking post:", error.response?.data );
+            console.error("Error liking post:", error.response?.data);
         }
     };
-    
+
     const goToPostDetails = (postId) => {
         navigate(`/postDetail/${postId}`); // Redirect to PostPage with postId
     };
@@ -112,10 +114,13 @@ const Home = () => {
                                     src={post.fileUrl}
                                     alt="Post"
                                     className="post-image"
+                                    onClick={() => setSelectedImage(post.fileUrl)}
+                                    style={{ cursor: "pointer" }}
                                 />
+
                                 <div className="button-group">
-                                    <button style={{ backgroundColor: post.likes.some(like => like.users.email === email) ? "red" : "gray" }}  onClick={() => likePost(post.id) } className="details-btn love-btn">{post.likes.length == 0 ? 'Like' : post.likes.length}<CiHeart style={{ fontSize: "18px" }} /></button>
-                                    <button onClick={()=>goToPostDetails(post.id)} className="upload-pic-btn comment-btn">{post.comments.length == 0 ? 'Comment' : post.comments.length}<FaRegComment /></button>
+                                    <button style={{ backgroundColor: post.likes.some(like => like.users.email === email) ? "red" : "gray" }} onClick={() => likePost(post.id)} className="details-btn love-btn">{post.likes.length == 0 ? 'Like' : post.likes.length}<CiHeart style={{ fontSize: "18px" }} /></button>
+                                    <button onClick={() => goToPostDetails(post.id)} className="upload-pic-btn comment-btn">{post.comments.length == 0 ? 'Comment' : post.comments.length}<FaRegComment /></button>
                                 </div>
                             </div>
                         ))}
@@ -125,6 +130,16 @@ const Home = () => {
                     <div className='right-section'>
                         <RightAside />
                     </div>
+
+                    {selectedImage && (
+                        <div className="image-modal" onClick={() => setSelectedImage(null)}>
+                            <div className="modal-contents" onClick={(e) => e.stopPropagation()}>
+                                <span className="close-btnes" onClick={() => setSelectedImage(null)}>&times;</span>
+                                <img src={selectedImage} alt="Enlarged Post" className="modal-image" />
+                            </div>
+                        </div>
+                    )}
+
 
                 </div>
             </div>

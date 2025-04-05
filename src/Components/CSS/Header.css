@@ -76,3 +76,36 @@
   height: 100%;
   object-fit: cover;
 }
+
+
+.search-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 429px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10;
+  top: 63px;
+  left: 377px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.search-user-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.search-user-item:hover {
+  background-color: #f0f0f0;
+}
+
+.search-user-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
