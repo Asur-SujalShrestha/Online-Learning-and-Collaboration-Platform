@@ -4,13 +4,12 @@
     align-items: center;
     background-color: #504F4F;
     color: white;
-    padding: 10px 20px;
     z-index: 2;
     top: 0;
     left: 0;
   }
   
-  .logo {
+  .logos {
     font-size: 24px;
     font-weight: bold;
   }

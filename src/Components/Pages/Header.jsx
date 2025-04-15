@@ -74,7 +74,7 @@ function Header() {
   return (
     <div>
       <div className="header">
-        <h1 className="logo"><Link className="logo-title" to="/home">CollApp</Link></h1>
+        <h1 className="logos"><Link className="logo-title" to="/home">CollApp</Link></h1>
 
         <div className="search-container">
           <input

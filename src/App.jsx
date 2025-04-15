@@ -18,6 +18,12 @@ import ChatList from './Components/Pages/ChatList'
 import VideoChat from './Components/Pages/VideoChat'
 import RoomsList from './Components/Pages/RoomsList'
 import Planning from './Components/Pages/Planning'
+import ConferenceRoom from './Components/Pages/VideoConference'
+import ConferencesPage from './Components/Pages/CreateConference'
+import VideoApi from './Components/Pages/VideoConference'
+import Register from './Components/Authentications/Register'
+import AdminDashboard from './Components/Pages/Admin/AdminDashboard'
+import SuperAdminDashboard from './Components/Pages/SuperAdmin/SuperAdminDashboard'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -42,6 +48,7 @@ function App() {
                 <Route path='/home' element={<Home/>}/>
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/postDetail/:postId" element={<PostDetail/>}/>
                 <Route path='/program' element={<Program />} />
                 <Route path="/programDetail/:programId" element={<ProgramDetail />} />
@@ -50,6 +57,11 @@ function App() {
                 <Route path="/videocalls" element={<RoomsList />} />
                 <Route path="/videochat/:roomId" element={<VideoChat />} />
                 <Route path="/planning" element={<Planning />} />
+                <Route path="/conference/:conferenceId" element={<ConferenceRoom />} />
+                <Route path="/create" element={<ConferencesPage/>} />
+                <Route path="/video-api" element={<VideoApi/>} />
+                <Route path="/admin" element={<AdminDashboard/>} />
+                <Route path="/super-admin" element={<SuperAdminDashboard/>} />
             </Routes>
         </BrowserRouter>
 

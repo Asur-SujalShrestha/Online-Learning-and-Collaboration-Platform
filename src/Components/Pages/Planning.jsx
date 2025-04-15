@@ -27,7 +27,7 @@ export default function Planning() {
     const userId = token ? jwtDecode(token).id : null;
 
     useEffect(() => {
-        fetch(`https://192.168.101.3:8081/collapp/planning/get-plan/${userId}`)
+        fetch(`${import.meta.env.VITE_API_PLANNING}/get-plan/${userId}`)
             .then((res) => res.json())
             .then((data) => {
                 const grouped = {
@@ -56,7 +56,7 @@ export default function Planning() {
         updatedTickets[destination.droppableId].push(ticket);
         setTickets(updatedTickets);
 
-        fetch(`https://192.168.101.3:8081/collapp/planning/${draggableId}`, {
+        fetch(`${import.meta.env.VITE_API_PLANNING}/${draggableId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function Planning() {
             userId,
         };
 
-        fetch("https://192.168.101.3:8081/collapp/planning/add-plan", {
+        fetch(`${import.meta.env.VITE_API_PLANNING}/add-plan`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(ticket),
@@ -90,7 +90,7 @@ export default function Planning() {
     };
 
     const deleteTicket = (planId) => {
-        fetch(`https://192.168.101.3:8081/collapp/planning/delete-plan/${planId}`, {
+        fetch(`${import.meta.env.VITE_API_PLANNING}/delete-plan/${planId}`, {
           method: "DELETE",
         })
           .then((res) => {

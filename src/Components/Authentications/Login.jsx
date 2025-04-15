@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.css";
 import axios from "axios";
 import toast from 'react-hot-toast';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [step, setStep] = useState("login"); // Possible values: "login", "forgotPassword", "otpVerification"
@@ -309,6 +309,7 @@ const Login = () => {
             </>
           )}
         </div>
+        <p>Register an organization? <Link to="/register">Sign up</Link></p>
       </div>
     </div>
   );

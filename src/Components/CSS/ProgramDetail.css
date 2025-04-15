@@ -223,7 +223,7 @@
   /* Attachments */
   .attachment {
         /* margin-top: 5px; */
-        padding: 0 15px;
+        padding: 5px 15px;
         background-color: #e0e0e0;
         display: flex;
         font-size: 14px;
