@@ -1,5 +1,6 @@
 package com.example.CollApp.Controller;
 
+import com.example.CollApp.DTO.InsertProgramDTO;
 import com.example.CollApp.DTO.ProgramDTO;
 import com.example.CollApp.Model.Programs;
 import com.example.CollApp.Service.Interface.Implementation.ProgramService;
@@ -22,7 +23,7 @@ public class ProgramController {
 
     //http://localhost:8081/collapp/program/addProgram
     @PostMapping("/addProgram")
-    public ResponseEntity<String> addProgram(@RequestBody Programs program) {
+    public ResponseEntity<String> addProgram(@RequestBody InsertProgramDTO program) {
         return programService.addNewProgram(program);
 
     }
@@ -47,5 +48,12 @@ public class ProgramController {
     @GetMapping("/getPrograms/{programId}")
     public ResponseEntity<List<ProgramDTO>> getProgramByProgramId(@PathVariable long programId) {
         return programService.getProgramByProgramId(programId);
+    }
+
+
+    @GetMapping("/get-program-organization/{organizationId}")
+    public ResponseEntity<List<ProgramDTO>> getProgramByOrganization(@PathVariable long organizationId) {
+        List<ProgramDTO> programDTOList = programService.getProgramByOrganization(organizationId);
+        return ResponseEntity.ok(programDTOList);
     }
 }

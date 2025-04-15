@@ -12,4 +12,8 @@ public interface IUserService {
     Users registerUser(RegisterDTO user);
 
     List<Users> getAllUsers();
+
+    List<Users> getUserByOrganization(long organizationId);
+
+    void updateRole(long userId, String role);
 }

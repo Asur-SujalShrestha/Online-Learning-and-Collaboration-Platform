@@ -33,6 +33,10 @@ public class Users  {
     private String role;
     private String profilePic;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization", nullable = true)
+    private Organizations organization;
+
     public ForgetPassword getForgetPassword() {
         return forgetPassword;
     }

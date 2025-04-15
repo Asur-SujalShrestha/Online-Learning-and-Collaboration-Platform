@@ -19,6 +19,10 @@ public class Groups {
     private long id;
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizationId", nullable = true)
+    private Organizations organization;
+
     @OneToMany(mappedBy = "group")
     @JsonManagedReference
     private List<GroupMembers> members;

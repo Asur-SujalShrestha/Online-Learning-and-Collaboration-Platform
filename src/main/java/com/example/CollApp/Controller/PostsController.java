@@ -41,4 +41,10 @@ public class PostsController {
     public List<Posts> GetAllPosts() {
         return postService.getAllPost();
     }
+
+    @GetMapping("/get-all-post/{organizationId}")
+    public ResponseEntity<List<Posts>> GetAllPostsByOrganization(@PathVariable long organizationId) {
+        List<Posts> organizationPost = postService.getPostByOrganization(organizationId);
+        return ResponseEntity.ok(organizationPost);
+    }
 }

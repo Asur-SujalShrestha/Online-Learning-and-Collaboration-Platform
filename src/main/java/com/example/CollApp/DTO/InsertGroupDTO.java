@@ -5,16 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
-    private String date;
-    private String caption;
-    private int likeCount;
+public class InsertGroupDTO {
+    private String name;
     private long organizationId;
-
 }

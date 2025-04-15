@@ -48,4 +48,17 @@ public class UserController {
     public List<Users> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    //https://192.168.101.3:8081/collapp/users/get-user-by-organization/1
+    @GetMapping("/get-user-by-organization/{organizationId}")
+    public ResponseEntity<List<Users>> getUsersByOrganization(@PathVariable long organizationId) {
+        List<Users> response = userService.getUserByOrganization(organizationId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update-user-role/{userId}")
+    public ResponseEntity<String> updateUserRole(@PathVariable long userId, @RequestBody String role) {
+        userService.updateRole(userId, role);
+        return ResponseEntity.ok("User's role updated successfully.");
+    }
 }

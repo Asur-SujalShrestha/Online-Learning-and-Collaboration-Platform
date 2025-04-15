@@ -84,6 +84,7 @@ public class JwtTokenProvider implements Serializable {
                 .claim("profilePic", user.getProfilePic())
                 .claim("firstName", user.getFirstName())
                 .claim("lastName", user.getLastName())
+                .claim("organization", user.getOrganization().getId())
                 .claim("Full Name", user.getFirstName() + " " + user.getLastName())
                 .claim(AUTHORITIES_KEY, "ROLE_"+authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

@@ -3,8 +3,10 @@ package com.example.CollApp.Service.Interface.Implementation;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.CollApp.DTO.PostDTO;
+import com.example.CollApp.Model.Organizations;
 import com.example.CollApp.Model.Posts;
 import com.example.CollApp.Model.Users;
+import com.example.CollApp.Repository.OrganizationRepository;
 import com.example.CollApp.Repository.PostRepository;
 import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IPostService;
@@ -24,11 +26,13 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final Cloudinary cloudinary;
+    private final OrganizationRepository organizationRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, Cloudinary cloudinary) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, Cloudinary cloudinary, OrganizationRepository organizationRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.cloudinary = cloudinary;
+        this.organizationRepository = organizationRepository;
     }
 
     public String uploadImage(MultipartFile file){
@@ -44,6 +48,9 @@ public class PostService implements IPostService {
     @Override
     public ResponseEntity<String> savePost(String email, PostDTO postDto, MultipartFile file) {
         Users user = userRepository.findByEmail(email);
+        Organizations organizations = organizationRepository.findById(postDto.getOrganizationId()).orElseThrow(()-> new RuntimeException("Organization not found"));
+
+
         if (user == null) {
             return new ResponseEntity<>("User not Found", HttpStatus.NOT_FOUND);
         }
@@ -54,6 +61,7 @@ public class PostService implements IPostService {
         post.setDate(Date.valueOf(postDto.getDate()));
         post.setFileUrl(fileURL);
         post.setLikeCount(postDto.getLikeCount());
+        post.setOrganizations(organizations);
         post.setUser(user);
         postRepository.save(post);
         return ResponseEntity.ok("Post Uploaded Successfully");
@@ -83,4 +91,11 @@ public class PostService implements IPostService {
         }
         return post;
     }
+
+    @Override
+    public List<Posts> getPostByOrganization(long organizationId) {
+        Organizations organization = organizationRepository.findById(organizationId).orElseThrow(()-> new RuntimeException("Organization not found"));
+        return postRepository.findByOrganizations(organization);
+    }
+
 }

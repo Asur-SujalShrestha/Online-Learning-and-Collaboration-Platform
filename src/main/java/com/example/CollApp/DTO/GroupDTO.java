@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class GroupDTO {
     private long id;
     private String name;
+    private long organizationId;
     private List<GroupMemberDetailDTO> members;
 
     public GroupDTO(Groups groups) {

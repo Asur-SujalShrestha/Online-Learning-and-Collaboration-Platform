@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -21,11 +22,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
     public ResponseDTO generateToken(LoginDTO user){
         Users users = new Users();
@@ -36,6 +39,14 @@ public class AuthService {
         if (user.getEmail().isEmpty() || user.getPassword().isEmpty()){
             throw new BadCredentialsException("Email or Password is empty");
         }
+        Users LoginUser = userRepository.findByEmail(user.getEmail());
+        if(passwordEncoder.matches(user.getPassword(), LoginUser.getPassword())){
+            if(LoginUser.getOrganization().getStatus().equals("PENDING")){
+                throw new BadCredentialsException("Your Organization is yet not active. please wait till admin approves");
+            }
+        }
+
+
         Authentication manager = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(manager);
         final String token = jwtTokenProvider.generateToken(manager, users);

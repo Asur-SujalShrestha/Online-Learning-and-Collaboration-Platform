@@ -13,4 +13,6 @@ public interface IPostService {
     public List<Posts> getAllPost();
 
     Posts getPost(long id);
+
+    List<Posts> getPostByOrganization(long organizationId);
 }

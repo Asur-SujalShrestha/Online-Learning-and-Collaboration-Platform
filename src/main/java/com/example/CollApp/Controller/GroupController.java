@@ -1,6 +1,7 @@
 package com.example.CollApp.Controller;
 
 import com.example.CollApp.DTO.GroupDTO;
+import com.example.CollApp.DTO.InsertGroupDTO;
 import com.example.CollApp.Model.Groups;
 import com.example.CollApp.Service.Interface.Implementation.GroupService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class GroupController {
 
     //http://localhost:8081/collapp/group/register/new-group
     @PostMapping("/register/new-group")
-    public ResponseEntity<String> addNewGroup(@RequestBody Groups group) {
+    public ResponseEntity<String> addNewGroup(@RequestBody InsertGroupDTO group) {
         return groupService.addNewGroup(group);
     }
     //http://localhost:8081/collapp/group/get-all-group
@@ -28,10 +29,14 @@ public class GroupController {
         return groupService.getAllGroups();
     }
 
-
-
     @DeleteMapping("/delete/{groupId}")
     public ResponseEntity<String> deleteGroup(@PathVariable long groupId) {
         return groupService.deleteGroup(groupId);
+    }
+
+    @GetMapping("/get-group-organization/{organizationId}")
+    public ResponseEntity<List<GroupDTO>> getGroupsByOrganization(@PathVariable long organizationId) {
+        List<GroupDTO> groupList = groupService.getGroupByOrganization(organizationId);
+        return ResponseEntity.ok(groupList);
     }
 }

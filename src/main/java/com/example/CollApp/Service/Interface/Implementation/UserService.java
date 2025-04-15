@@ -3,7 +3,9 @@ package com.example.CollApp.Service.Interface.Implementation;
 import com.example.CollApp.DTO.LoginDTO;
 import com.example.CollApp.DTO.RegisterDTO;
 import com.example.CollApp.DTO.ResponseDTO;
+import com.example.CollApp.Model.Organizations;
 import com.example.CollApp.Model.Users;
+import com.example.CollApp.Repository.OrganizationRepository;
 import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IUserService;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +27,12 @@ import java.util.Set;
 public class UserService implements IUserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final OrganizationRepository organizationRepository;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrganizationRepository organizationRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.organizationRepository = organizationRepository;
     }
 
     @Override
@@ -46,8 +50,9 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public Users registerUser(RegisterDTO user) {
-        Optional<Users> existingUser = Optional.ofNullable(userRepository.findByEmail(user.getEmail()));
-        if (existingUser.isPresent()) {
+        Users existingUser = userRepository.findByEmail(user.getEmail());
+        Organizations organization = organizationRepository.findById(user.getOrganizationId()).orElseThrow(()->new RuntimeException("Organization not found"));
+        if (existingUser != null) {
             throw new RuntimeException("Email is already registered.");
         }
         Users users = new Users();
@@ -58,6 +63,7 @@ public class UserService implements IUserService, UserDetailsService {
         users.setAddress(user.getAddress());
         users.setPassword(passwordEncoder.encode(user.getPassword()));
         users.setRole(user.getRole());
+        users.setOrganization(organization);
         users.setProfilePic(user.getProfilePic());
         return userRepository.save(users);
     }
@@ -65,6 +71,20 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public List<Users> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<Users> getUserByOrganization(long organizationId) {
+        Organizations organizations = organizationRepository.findById(organizationId).orElseThrow(()-> new RuntimeException("Organization not Found"));
+
+        return userRepository.findByOrganization(organizations);
+    }
+
+    @Override
+    public void updateRole(long userId, String role) {
+        Users user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not Found"));
+        user.setRole(role);
+        userRepository.save(user);
     }
 
 

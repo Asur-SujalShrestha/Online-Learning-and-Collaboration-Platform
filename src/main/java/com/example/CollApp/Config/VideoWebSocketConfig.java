@@ -38,7 +38,7 @@ public class VideoWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/video-chat").setAllowedOrigins("https://localhost:5173", "https://192.168.101.4:5173").withSockJS();
+        registry.addEndpoint("/video-chat").setAllowedOrigins("*", "https://100.64.238.11:5173").withSockJS();
     }
 
     @Override

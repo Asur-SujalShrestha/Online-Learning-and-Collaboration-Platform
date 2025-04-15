@@ -28,6 +28,10 @@ public class Posts {
     @Column(nullable = true)
     private int likeCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizationId", nullable = true)
+    private Organizations organizations;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "uploadedBy", nullable = false)
     private Users user;

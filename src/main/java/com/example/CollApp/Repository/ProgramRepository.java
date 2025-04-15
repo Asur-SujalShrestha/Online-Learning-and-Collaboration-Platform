@@ -1,5 +1,6 @@
 package com.example.CollApp.Repository;
 
+import com.example.CollApp.Model.Organizations;
 import com.example.CollApp.Model.Programs;
 import com.example.CollApp.Model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ import java.util.List;
 public interface ProgramRepository extends JpaRepository<Programs, Long> {
     @Query("SELECT p FROM Programs p JOIN p.members m WHERE m.user = :user")
     List<Programs> findByUser(@Param("user") Users user);
+
+    List<Programs> findByOrganization(Organizations organization);
 }

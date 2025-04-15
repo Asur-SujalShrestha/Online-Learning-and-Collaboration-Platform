@@ -9,18 +9,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebRTCConfiguration implements WebSocketMessageBrokerConfigurer {
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/video")
-                .setAllowedOrigins("*")
-                .withSockJS();  // Enables SockJS fallback
+        // Endpoint for WebSocket handshake, with SockJS fallback
+        registry.addEndpoint("/collapp/video").setAllowedOrigins("https://100.64.238.11:5173").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");  // Enables topic-based messaging
-        registry.setApplicationDestinationPrefixes("/collapp");
+        // Enable a simple in-memory broker for broadcasting to topics and user queues
+        registry.enableSimpleBroker("/topic", "/queue");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }
+
 

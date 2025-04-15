@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collapp/program-member")
+@CrossOrigin
 public class ProgramMemberController {
     private final ProgramMemberService programMemberService;
 
