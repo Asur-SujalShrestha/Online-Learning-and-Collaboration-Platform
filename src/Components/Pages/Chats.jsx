@@ -9,6 +9,7 @@ import WebSocketService from '../Services/WebSocketService';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import "../CSS/Chats.css";
+import VideoChat from './VideoChat';
 
 function Chats({ receiver, onBack }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
@@ -24,51 +25,53 @@ function Chats({ receiver, onBack }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [filePreview, setFilePreview] = useState(false);
     const [imagePreview, setImagePreview] = useState(false);
-    const messageEndRef = useRef(null); 
+    const messageEndRef = useRef(null);
+    const [showVideoCall, setShowVideoCall] = useState(false);
+
 
     const scrollToBottom = () => {
         setTimeout(() => {
             messageEndRef.current?.scrollIntoView({ behavior: "auto" });
         }, 100);
     };
-    
+
 
     useEffect(() => {
-    setMessages([]);
+        setMessages([]);
 
-    const fetchMessages = async () => {
-        try {
-            const response = await axios.get(`https://192.168.101.3:8081/collapp/get-messages`, {
-                params: { senderId: userId, receiverId: receiver.id },
-            });
-            setMessages(response.data);
-            
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100); // Short delay to allow UI update
-        } catch (error) {
-            console.error("Error fetching messages:", error);
-        }
-    };
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get(`https://192.168.101.3:8081/collapp/get-messages`, {
+                    params: { senderId: userId, receiverId: receiver.id },
+                });
+                setMessages(response.data);
 
-    fetchMessages();
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100); // Short delay to allow UI update
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        };
 
-    WebSocketService.connect(userId, firstName, (message) => {
-        if (
-            (message.senderId === userId && message.receiverId === receiver.id) ||
-            (message.senderId === receiver.id && message.receiverId === userId)
-        ) {
-            setMessages((prevMessages) => [...prevMessages, message]);
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100);
-        }
-    });
+        fetchMessages();
 
-    return () => {
-        WebSocketService.disconnect();
-    };
-}, [receiver.id, userId]);
+        WebSocketService.connect(userId, firstName, (message) => {
+            if (
+                (message.senderId === userId && message.receiverId === receiver.id) ||
+                (message.senderId === receiver.id && message.receiverId === userId)
+            ) {
+                setMessages((prevMessages) => [...prevMessages, message]);
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100);
+            }
+        });
+
+        return () => {
+            WebSocketService.disconnect();
+        };
+    }, [receiver.id, userId]);
 
 
     const sendMessage = () => {
@@ -148,7 +151,7 @@ function Chats({ receiver, onBack }) {
 
         try {
             console.log("Enter");
-            
+
             const response = await axios.post("http://localhost:8081/collapp/upload-image", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -156,7 +159,7 @@ function Chats({ receiver, onBack }) {
                 },
             });
             console.log("After");
-            
+
             const fileUrl = response.data; // Adjust based on backend response
             const fileMessage = {
                 senderId: userId,
@@ -189,7 +192,7 @@ function Chats({ receiver, onBack }) {
                     </div>
                     <div className='call-list'>
                         <IoCall className='call' />
-                        <FaVideo className='call' />
+                        <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{color:"#fff"}}/>
                         <HiDotsVertical className='call' />
                     </div>
                 </div>
@@ -259,6 +262,14 @@ function Chats({ receiver, onBack }) {
                     </div>
                 )}
             </div>
+            <VideoChat
+                isOpen={showVideoCall}
+                onClose={() => setShowVideoCall(false)}
+                userId={userId}
+                userName={firstName}
+                receiverId={receiver.id}
+            />
+
         </div>
     );
 }

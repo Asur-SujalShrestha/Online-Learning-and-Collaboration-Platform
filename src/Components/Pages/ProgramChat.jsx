@@ -8,14 +8,17 @@ import { IoCall } from "react-icons/io5";
 import { FaPlus, FaVideo } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { HiOutlinePhoto } from "react-icons/hi2";
+import GroupVideoChat from "./GroupVideoChat";
 
 function ProgramChat({ programId, programDetail }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
     const userId = token ? jwtDecode(token).id : null;
+    const firstName = token ? jwtDecode(token).firstName : null;
     const senderProfile = token ? jwtDecode(token).profilePic : null;
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const messageEndRef = useRef(null);
+    const [showVideoCall, setShowVideoCall] = useState(false);
 
     useEffect(() => {
         setMessages([]);
@@ -92,7 +95,7 @@ function ProgramChat({ programId, programDetail }) {
 
                     <div className='call-list'>
                         <IoCall className='call' />
-                        <FaVideo className='call' />
+                        <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{ color: "#fff" }}/>
                         <HiDotsVertical className='call' />
                     </div>
                 </div>
@@ -137,6 +140,13 @@ function ProgramChat({ programId, programDetail }) {
                     <IoIosSend className="send-icon" onClick={sendMessage} />
                 </div>
             </div>
+            <GroupVideoChat
+                 isOpen={showVideoCall}
+                 onClose={() => setShowVideoCall(false)}
+                 userId={userId}            
+                 userName={firstName}       
+                 groupId={`program-${programId}`} 
+            />
         </div>
     );
 }

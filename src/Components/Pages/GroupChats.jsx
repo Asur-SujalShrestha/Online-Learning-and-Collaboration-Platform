@@ -5,6 +5,11 @@ import WebSocketService from "../Services/WebSocketService";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import "../CSS/Chats.css";
+import VideoChat from "./VideoChat";
+import { IoCall} from "react-icons/io5";
+import { FaVideo } from "react-icons/fa";
+import { HiDotsVertical } from "react-icons/hi";
+import GroupVideoChat from "./GroupVideoChat";
 
 function GroupChats({ group, onBack }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
@@ -15,17 +20,18 @@ function GroupChats({ group, onBack }) {
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const messageEndRef = useRef(null);
+    const [showVideoCall, setShowVideoCall] = useState(false);
 
     useEffect(() => {
         setMessages([]);
-    
+
         // Fetch past group messages
         const fetchGroupMessages = async () => {
             try {
                 const response = await axios.get(
                     `https://192.168.101.3:8081/collapp/get-group-messages/${group.id}`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    }
+                    headers: { Authorization: `Bearer ${token}` }
+                }
                 );
                 setMessages(response.data);
                 scrollToBottom();
@@ -33,20 +39,20 @@ function GroupChats({ group, onBack }) {
                 console.error("Error fetching group messages:", error);
             }
         };
-    
+
         fetchGroupMessages();
-    
+
         // ✅ Now using connectToGroup instead of manual subscription
         WebSocketService.connectToGroup(group.id, (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
             scrollToBottom();
         });
-    
+
         return () => {
             WebSocketService.disconnect(); // Clean up WebSocket connection
         };
     }, [group.id]);
-    
+
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -90,6 +96,11 @@ function GroupChats({ group, onBack }) {
                         <div className="group-avatar">G</div>
                         <h3 style={{ margin: "0" }}>{group.name}</h3>
                     </div>
+                    <div className='call-list'>
+                        <IoCall className='call' />
+                        <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{ color: "#fff" }} />
+                        <HiDotsVertical className='call' />
+                    </div>
                 </div>
 
                 <div className="chat-messages">
@@ -130,6 +141,13 @@ function GroupChats({ group, onBack }) {
                     <IoIosSend className="send-icon" onClick={sendMessage} />
                 </div>
             </div>
+            <GroupVideoChat
+                 isOpen={showVideoCall}
+                 onClose={() => setShowVideoCall(false)}
+                 userId={userId}            
+                 userName={firstName}       
+                 groupId={`group-${group.id}`} 
+            />
         </div>
     );
 }
