@@ -13,6 +13,7 @@ import com.example.CollApp.Repository.ProgramRepository;
 import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IAssignmentService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Primary
 public class AssignmentService implements IAssignmentService {
     private final UserRepository userRepository;
     private final ProgramRepository programRepository;

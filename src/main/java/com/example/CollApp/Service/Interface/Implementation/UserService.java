@@ -8,6 +8,7 @@ import com.example.CollApp.Model.Users;
 import com.example.CollApp.Repository.OrganizationRepository;
 import com.example.CollApp.Repository.UserRepository;
 import com.example.CollApp.Service.Interface.IUserService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Primary
 public class UserService implements IUserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;

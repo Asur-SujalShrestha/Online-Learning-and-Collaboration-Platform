@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,8 @@ public class GroupDTO {
     public GroupDTO(Groups groups) {
         this.id = groups.getId();
         this.name = groups.getName();
-        this.members = groups.getMembers().stream()
+        this.members = groups.getMembers() != null ? groups.getMembers().stream()
                 .map(GroupMemberDetailDTO::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()) : new ArrayList<>();
     }
 }

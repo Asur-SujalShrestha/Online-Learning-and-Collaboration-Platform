@@ -19,7 +19,7 @@ public class UserController {
     private final IUserService userService;
     private final AuthService authService;
 
-    public UserController(UserService userService, AuthService authService) {
+    public UserController(IUserService userService, AuthService authService) {
         this.userService = userService;
         this.authService = authService;
     }

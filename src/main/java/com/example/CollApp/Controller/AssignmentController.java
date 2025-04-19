@@ -2,6 +2,7 @@ package com.example.CollApp.Controller;
 
 import com.example.CollApp.DTO.AssignmenDTO;
 import com.example.CollApp.Model.Assignments;
+import com.example.CollApp.Service.Interface.IAssignmentService;
 import com.example.CollApp.Service.Interface.Implementation.AssignmentService;
 import org.hibernate.sql.ast.tree.update.Assignment;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ import java.util.List;
 @RequestMapping("/collapp/assignment")
 @CrossOrigin
 public class AssignmentController {
-    private final AssignmentService assignmentService;
+    private final IAssignmentService assignmentService;
 
-    public AssignmentController(AssignmentService assignmentService) {
+    public AssignmentController(IAssignmentService assignmentService) {
         this.assignmentService = assignmentService;
     }
 
