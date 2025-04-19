@@ -73,14 +73,14 @@ function Header() {
 
   return (
     <div>
-      <div className="header">
+      <div className="nav-header">
         <h1 className="logos"><Link className="logo-title" to="/home">CollApp</Link></h1>
 
         <div className="search-container">
           <input
             type="text"
             placeholder="Search..."
-            className="search-input"
+            className="nav-search-input"
             value={searchTerm}
             onChange={handleSearch}
             onFocus={() => searchTerm && setShowDropdown(true)}

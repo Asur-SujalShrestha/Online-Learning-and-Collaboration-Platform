@@ -2,11 +2,11 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-.profile-containers {
+.home-profile-containers {
     background: white;
     padding: 0 20px;
     text-align: center;
-    width: 50%;
+    width: 62%;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@ body {
   
 
 .sidebar {
-    width: 20%;
+    width: 22%;
     background-color: #333333;
     color: white;
     padding: 20px;
@@ -269,7 +269,7 @@ body {
 
 .close-btnes {
   position: absolute;
-  top: -30px;
+  top: -40px;
   right: 0;
   font-size: 2rem;
   color: white;

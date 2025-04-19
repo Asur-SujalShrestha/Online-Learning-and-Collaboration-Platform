@@ -30,8 +30,8 @@ function LeftAside() {
         fetchUser();
     }, []);
     return (
-        <div className="sidebar left-sidebar">
-            <h2 className="subtitle">Friends</h2>
+        <div className="leftside-sidebar left-sidebars">
+            <h2 className="subtitles">Friends</h2>
             <ul className="friends-list">
                 {listUser.map((user) => (
                     <li key={user.id} className="friend-item">

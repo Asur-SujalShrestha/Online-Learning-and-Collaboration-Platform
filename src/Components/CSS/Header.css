@@ -1,8 +1,9 @@
-.header {
+.nav-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #504F4F;
+    padding: 14px 15px;
     color: white;
     z-index: 2;
     top: 0;
@@ -22,9 +23,9 @@
 ;
 }
   
-.search-input {
+.nav-search-input {
     width: 45%;
-    padding: 10px 8px;
+    padding: 6px;
     border-radius: 5px;
     border: none;
     background-color: #ffff;

@@ -1,6 +1,7 @@
-.subtitle {
+.subtitles {
     margin-top: 20px;
     font-size: 18px;
+    color: #fff;
 }
 
 .friends-list,
@@ -33,8 +34,8 @@
     object-fit: cover;
 
 }
-.sidebar {
-    width: 20%;
+.leftside-sidebar {
+    width: 22%;
     background-color: #333333;
     color: white;
     padding: 20px;
@@ -43,6 +44,6 @@
     overflow: hidden;
 }
 
-.left-sidebar {
+.left-sidebars {
     left: 0;
 }

@@ -27,7 +27,7 @@ function RightAside() {
         <div>
             <div className="sidebar right-sidebar">
                 <div>
-                <h2 className="subtitle">Programs</h2>
+                <h2 className="subtitles">Programs</h2>
                 <ul className="groups-list">
                     {
                         listProgram.map((program, index)=>(

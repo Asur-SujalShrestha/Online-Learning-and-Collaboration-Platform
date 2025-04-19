@@ -91,7 +91,7 @@ const Home = () => {
                     <div className='left-section'>
                         <LeftAside />
                     </div>
-                    <div className="profile-containers">
+                    <div className="home-profile-containers">
                         {posts.map((post, index) => (
                             <div className="home-post" key={index}>
                                 <div className="post-header">
