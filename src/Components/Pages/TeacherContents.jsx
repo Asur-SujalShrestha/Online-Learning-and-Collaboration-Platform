@@ -55,7 +55,7 @@ function TeacherContents({ programId, programDetail }) {
                         alt="Profile"
                         className="profile-pic"
                     />
-                    <h2>{programDetail?.name || "Loading..."}</h2>
+                    <h2 style={{color:"white"}}>{programDetail?.name || "Loading..."}</h2>
                 </div>
                 <div className='call-list'>
                     <IoCall className='call' />

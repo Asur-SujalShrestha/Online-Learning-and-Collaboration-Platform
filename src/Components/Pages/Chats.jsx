@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import "../CSS/Chats.css";
 import VideoChat from './VideoChat';
+import VoiceCall from './VoiceCall';
 
 function Chats({ receiver, onBack }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
@@ -27,7 +28,7 @@ function Chats({ receiver, onBack }) {
     const [imagePreview, setImagePreview] = useState(false);
     const messageEndRef = useRef(null);
     const [showVideoCall, setShowVideoCall] = useState(false);
-
+    const [showVoiceCall, setShowVoiceCall] = useState(false);
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -191,7 +192,7 @@ function Chats({ receiver, onBack }) {
                         <h3 style={{ margin: "0" }}>{receiver.firstName} {receiver.lastName}</h3>
                     </div>
                     <div className='call-list'>
-                        <IoCall className='call' />
+                        <IoCall className='call' onClick={() => setShowVoiceCall(true)} style={{color:"#fff"}} />
                         <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{color:"#fff"}}/>
                         <HiDotsVertical className='call' />
                     </div>
@@ -269,7 +270,12 @@ function Chats({ receiver, onBack }) {
                 userName={firstName}
                 receiverId={receiver.id}
             />
-
+            <VoiceCall 
+                isOpen={showVoiceCall}
+                onClose={() => setShowVoiceCall(false)}
+                userId={userId}
+                userName={firstName}
+                receiverId={receiver.id}/>
         </div>
     );
 }

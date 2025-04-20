@@ -9,16 +9,25 @@ import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
 import Chats from "./Chats"; // Import Chats component
 import GroupChats from "./GroupChats"; // Import GroupChats component
+import AddGroupModal from "./AddGroupModal";
+import Modal from "react-modal"; // install it: npm install react-modal
+
 
 const ChatList = () => {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
     const userId = token ? jwtDecode(token).id : null;
-
+    const organizationId = token ? jwtDecode(token).organization : null;
     const [activeTab, setActiveTab] = useState("users");
     const [userList, setUserList] = useState([]);
     const [groupList, setGroupList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedGroup, setSelectedGroup] = useState(null);
+    // const [showAddGroupModal, setShowAddGroupModal] = useState(false);
+    const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+    const [newGroupName, setNewGroupName] = useState("");
+    const [selectedUsers, setSelectedUsers] = useState([]);
+
+
 
     useEffect(() => {
         fetchUsers();
@@ -53,6 +62,61 @@ const ChatList = () => {
         if (!word) return "";
         return word.charAt(0).toUpperCase() + word.slice(1);
     };
+
+    const openGroupModal = () => setIsGroupModalOpen(true);
+    const closeGroupModal = () => {
+        setIsGroupModalOpen(false);
+        setNewGroupName("");
+        setSelectedUsers([]);
+    };
+
+    const handleCreateGroup = async () => {
+        if (!newGroupName || selectedUsers.length === 0) {
+            toast.error("Please provide a group name and select members.");
+            return;
+        }
+
+        try {
+            // Step 1: Create group
+            const groupRes = await axios.post(
+                `${import.meta.env.VITE_API_GROUP}/register/new-group`,
+                {
+                    name: newGroupName,
+                    organizationId: organizationId
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const groupId = groupRes.data || groupRes.data;
+
+            // Step 2: Add members
+            const memberRequests = selectedUsers.map(uid =>
+                axios.post(
+                    `${import.meta.env.VITE_API_GROUPMEMBER}/add-member`,
+                    { groupId, userId: uid, role: "member" },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                )
+            );
+
+            // Add current user as admin
+            memberRequests.push(
+                axios.post(
+                    `${import.meta.env.VITE_API_GROUPMEMBER}/add-member`,
+                    { groupId, userId: userId, role: "admin" },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                )
+            );
+
+            await Promise.all(memberRequests);
+            toast.success("Group created successfully!");
+
+            closeGroupModal();
+            fetchGroups();
+        } catch (err) {
+            toast.error(err.response?.data || "Failed to create group");
+        }
+    };
+
 
     return (
         <div>
@@ -106,17 +170,55 @@ const ChatList = () => {
                                             ))
                                     }
 
-                                    {activeTab === "groups" &&
-                                        groupList.map((group) => (
-                                            <div key={group.id} className="chat-item" onClick={() => setSelectedGroup(group)}>
-                                                <div className="chat-avatar group-avatar">G</div>
-                                                <div className="chat-info">
-                                                    <h4 className="chat-name">{capitalizeFirstLetter(group.name)}</h4>
-                                                    <p className="chat-message">{group.members.length} Members</p>
-                                                </div>
+                                    {activeTab === "groups" && (
+                                        <>
+                                            {/* Add Group Button */}
+                                            <div className="group-header">
+                                                <button className="add-group-btn" onClick={openGroupModal}>+ New Group</button>
                                             </div>
-                                        ))
-                                    }
+
+                                            {/* Modal for creating group */}
+                                            <Modal isOpen={isGroupModalOpen} onRequestClose={closeGroupModal} className="group-modal">
+                                                <h2>Create New Group</h2>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter Group Name"
+                                                    value={newGroupName}
+                                                    onChange={(e) => setNewGroupName(e.target.value)}
+                                                />
+                                                <select
+                                                    multiple
+                                                    value={selectedUsers}
+                                                    onChange={(e) =>
+                                                        setSelectedUsers(Array.from(e.target.selectedOptions, option => option.value))
+                                                    }
+                                                >
+                                                    {userList
+                                                        .filter(user => user.id !== userId)
+                                                        .map(user => (
+                                                            <option key={user.id} value={user.id}>
+                                                                {user.firstName} {user.lastName}
+                                                            </option>
+                                                        ))}
+                                                </select>
+                                                <br />
+                                                <button onClick={handleCreateGroup}>Create Group</button>
+                                                <button onClick={closeGroupModal}>Cancel</button>
+                                            </Modal>
+
+                                            {/* Group List */}
+                                            {groupList.map((group) => (
+                                                <div key={group.id} className="chat-item" onClick={() => setSelectedGroup(group)}>
+                                                    <div className="chat-avatar group-avatar">G</div>
+                                                    <div className="chat-info">
+                                                        <h4 className="chat-name">{capitalizeFirstLetter(group.name)}</h4>
+                                                        <p className="chat-message">{group.members.length} Members</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </>
+                                    )}
+
                                 </div>
                             </div>
                         </div>
@@ -127,6 +229,14 @@ const ChatList = () => {
                     </div>
                 </div>
             </div>
+
+            {/* {showAddGroupModal && (
+                <AddGroupModal
+                    onClose={() => setShowAddGroupModal(false)}
+                    onGroupCreated={fetchGroups}
+                />
+            )} */}
+
         </div>
     );
 };

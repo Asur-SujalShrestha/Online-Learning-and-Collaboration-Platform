@@ -10,6 +10,7 @@ import { IoCall} from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import GroupVideoChat from "./GroupVideoChat";
+import VoiceCall from "./VoiceCall";
 
 function GroupChats({ group, onBack }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
@@ -21,6 +22,7 @@ function GroupChats({ group, onBack }) {
     const [messageInput, setMessageInput] = useState("");
     const messageEndRef = useRef(null);
     const [showVideoCall, setShowVideoCall] = useState(false);
+    const [showVoiceCall, setShowVoiceCall] = useState(false);
 
     useEffect(() => {
         setMessages([]);
@@ -97,7 +99,7 @@ function GroupChats({ group, onBack }) {
                         <h3 style={{ margin: "0" }}>{group.name}</h3>
                     </div>
                     <div className='call-list'>
-                        <IoCall className='call' />
+                        <IoCall className='call' onClick={() => setShowVoiceCall(true)} style={{color:"#fff"}}/>
                         <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{ color: "#fff" }} />
                         <HiDotsVertical className='call' />
                     </div>
@@ -148,6 +150,12 @@ function GroupChats({ group, onBack }) {
                  userName={firstName}       
                  groupId={`group-${group.id}`} 
             />
+            <VoiceCall 
+                isOpen={showVoiceCall}
+                onClose={() => setShowVoiceCall(false)}
+                userId={userId}
+                userName={firstName}
+                receiverId={`group-${group.id}`}/>
         </div>
     );
 }

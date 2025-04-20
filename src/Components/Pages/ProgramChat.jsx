@@ -9,6 +9,7 @@ import { FaPlus, FaVideo } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { HiOutlinePhoto } from "react-icons/hi2";
 import GroupVideoChat from "./GroupVideoChat";
+import VoiceCall from "./VoiceCall";
 
 function ProgramChat({ programId, programDetail }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1");
@@ -19,6 +20,7 @@ function ProgramChat({ programId, programDetail }) {
     const [messageInput, setMessageInput] = useState("");
     const messageEndRef = useRef(null);
     const [showVideoCall, setShowVideoCall] = useState(false);
+    const [showVoiceCall, setShowVoiceCall] = useState(false);
 
     useEffect(() => {
         setMessages([]);
@@ -90,11 +92,11 @@ function ProgramChat({ programId, programDetail }) {
                             alt="Profile"
                             className="profile-pic"
                         />
-                        <h2>{programDetail?.name || "Loading..."}</h2>
+                        <h2 style={{color:"white"}}>{programDetail?.name || "Loading..."}</h2>
                     </div>
 
                     <div className='call-list'>
-                        <IoCall className='call' />
+                        <IoCall className='call' onClick={() => setShowVoiceCall(true)} style={{color:"#fff"}} />
                         <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{ color: "#fff" }}/>
                         <HiDotsVertical className='call' />
                     </div>
@@ -147,6 +149,12 @@ function ProgramChat({ programId, programDetail }) {
                  userName={firstName}       
                  groupId={`program-${programId}`} 
             />
+            <VoiceCall 
+                isOpen={showVoiceCall}
+                onClose={() => setShowVoiceCall(false)}
+                userId={userId}
+                userName={firstName}
+                receiverId={`program-${programId}`}/>
         </div>
     );
 }

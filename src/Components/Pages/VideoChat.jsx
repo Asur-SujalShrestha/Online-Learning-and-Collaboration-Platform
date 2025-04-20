@@ -357,6 +357,7 @@ const VideoChat = ({ userId, userName, receiverId, isOpen, onClose }) => {
       userID: userId.toString(),
       userName: userName,
       roomID: sortedRoomId,
+      showPreJoinView: false,
     });
   }, [isOpen]);
 
@@ -364,6 +365,7 @@ const VideoChat = ({ userId, userName, receiverId, isOpen, onClose }) => {
 
   return (
     <div className="video-call-overlay">
+      <button className="closebutton" onClick={()=>{onClose; window.location.reload()}} style={{position:"absolute", top:"20px", right:"20px", background:"none", border:"none", color:"red", padding:" 5px 10px"}}>X</button>
       <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
     </div>
   );
