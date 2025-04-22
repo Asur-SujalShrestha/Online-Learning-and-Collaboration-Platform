@@ -16,11 +16,13 @@ public class OrganizationService implements IOrganizationService {
     private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public OrganizationService(OrganizationRepository organizationRepository, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public OrganizationService(OrganizationRepository organizationRepository, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, EmailService emailService) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -50,6 +52,8 @@ public class OrganizationService implements IOrganizationService {
                 .profilePic(organizationDTO.getProfilePic())
                 .build();
         userRepository.save(user);
+
+        emailService.OrganizationRegistration(organizationDTO.getEmail());
         return ResponseEntity.ok("Your form is submitted successfully. Please wait for admin to approve you registration.");
 
     }
@@ -58,6 +62,7 @@ public class OrganizationService implements IOrganizationService {
     public void acceptOrganization(long organizationId, String status) {
         Organizations organization = organizationRepository.findById(organizationId).orElseThrow(()-> new RuntimeException("Organization not Found"));
         organization.setStatus(status);
+        emailService.AcceptOrganization(organization, status);
         organizationRepository.save(organization);
     }
 }

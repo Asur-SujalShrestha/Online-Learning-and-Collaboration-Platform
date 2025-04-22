@@ -61,4 +61,11 @@ public class UserController {
         userService.updateRole(userId, role);
         return ResponseEntity.ok("User's role updated successfully.");
     }
+
+    //https://192.168.101.6:8081/collapp/users/get-user/7
+    @GetMapping("/get-user/{userId}")
+    public ResponseEntity<Users> getUser(@PathVariable long userId) {
+        Users user = userService.getUser(userId);
+        return ResponseEntity.ok(user);
+    }
 }

@@ -15,4 +15,6 @@ public interface IPostService {
     Posts getPost(long id);
 
     List<Posts> getPostByOrganization(long organizationId);
+
+    List<Posts> getPostByUser(long userId);
 }

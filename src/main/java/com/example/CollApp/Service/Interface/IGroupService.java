@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IGroupService {
-    ResponseEntity<String> addNewGroup(InsertGroupDTO group);
+    ResponseEntity<Long> addNewGroup(InsertGroupDTO group);
 
     ResponseEntity<List<GroupDTO>> getAllGroups();
 

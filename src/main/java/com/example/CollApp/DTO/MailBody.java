@@ -2,8 +2,8 @@ package com.example.CollApp.DTO;
 
 import lombok.Builder;
 
-
-public record MailBody(String to, String subject, String text) {
+@Builder
+public record MailBody(String to, String subject, String text, boolean isHtml) {
     public static MailBodyBuilder builder() {
         return new MailBodyBuilder();
     }
@@ -12,6 +12,7 @@ public record MailBody(String to, String subject, String text) {
         private String to;
         private String subject;
         private String text;
+        private boolean isHtml;
 
         public MailBodyBuilder to(String to) {
             this.to = to;
@@ -28,8 +29,13 @@ public record MailBody(String to, String subject, String text) {
             return this;
         }
 
+        public MailBodyBuilder isHtml(boolean isHtml) {
+            this.isHtml = isHtml;
+            return this;
+        }
+
         public MailBody build() {
-            return new MailBody(to, subject, text);
+            return new MailBody(to, subject, text, isHtml);
         }
     }
 }

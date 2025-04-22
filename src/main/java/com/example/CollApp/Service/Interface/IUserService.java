@@ -16,4 +16,6 @@ public interface IUserService {
     List<Users> getUserByOrganization(long organizationId);
 
     void updateRole(long userId, String role);
+
+    Users getUser(long userId);
 }

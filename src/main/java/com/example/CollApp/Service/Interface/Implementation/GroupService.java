@@ -29,14 +29,14 @@ public class GroupService implements IGroupService {
     }
 
     @Override
-    public ResponseEntity<String> addNewGroup(InsertGroupDTO insertGroupDTO) {
+    public ResponseEntity<Long> addNewGroup(InsertGroupDTO insertGroupDTO) {
         Organizations organizations = organizationRepository.findById(insertGroupDTO.getOrganizationId()).orElseThrow(()-> new RuntimeException("Organization Not Found"));
         Groups group = Groups.builder()
                         .name(insertGroupDTO.getName())
                                 .organization(organizations)
                                         .build();
         groupRepository.save(group);
-        return ResponseEntity.ok("New Group Created");
+        return ResponseEntity.ok(group.getId());
     }
 
     @Override

@@ -30,11 +30,13 @@ public class UserService implements IUserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final OrganizationRepository organizationRepository;
+    private final EmailService emailService;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrganizationRepository organizationRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, OrganizationRepository organizationRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.organizationRepository = organizationRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -67,6 +69,7 @@ public class UserService implements IUserService, UserDetailsService {
         users.setRole(user.getRole());
         users.setOrganization(organization);
         users.setProfilePic(user.getProfilePic());
+        emailService.UserRegistration(user.getEmail(), organization.getOrganizationName(), user.getPassword());
         return userRepository.save(users);
     }
 
@@ -87,6 +90,12 @@ public class UserService implements IUserService, UserDetailsService {
         Users user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not Found"));
         user.setRole(role);
         userRepository.save(user);
+    }
+
+    @Override
+    public Users getUser(long userId) {
+         return userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User not Found"));
+
     }
 
 

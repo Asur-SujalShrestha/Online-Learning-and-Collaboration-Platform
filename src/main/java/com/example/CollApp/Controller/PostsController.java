@@ -47,4 +47,10 @@ public class PostsController {
         List<Posts> organizationPost = postService.getPostByOrganization(organizationId);
         return ResponseEntity.ok(organizationPost);
     }
+    //https://192.168.101.6:8081/collapp/posts/get-post-by-user/7
+    @GetMapping("/get-post-by-user/{userId}")
+    public ResponseEntity<List<Posts>> GetPostsByUser(@PathVariable long userId) {
+        List<Posts> userPostList = postService.getPostByUser(userId);
+        return ResponseEntity.ok(userPostList);
+    }
 }

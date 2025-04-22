@@ -98,4 +98,10 @@ public class PostService implements IPostService {
         return postRepository.findByOrganizations(organization);
     }
 
+    @Override
+    public List<Posts> getPostByUser(long userId) {
+        Users user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User not Found"));
+        return postRepository.findByUser(user);
+    }
+
 }

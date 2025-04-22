@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/collapp/group")
+@CrossOrigin
 public class GroupController {
     private final GroupService groupService;
 
@@ -20,7 +21,7 @@ public class GroupController {
 
     //http://localhost:8081/collapp/group/register/new-group
     @PostMapping("/register/new-group")
-    public ResponseEntity<String> addNewGroup(@RequestBody InsertGroupDTO group) {
+    public ResponseEntity<Long> addNewGroup(@RequestBody InsertGroupDTO group) {
         return groupService.addNewGroup(group);
     }
     //http://localhost:8081/collapp/group/get-all-group
