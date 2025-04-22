@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "../CSS/ChatList.css";
-import { FaSearch } from "react-icons/fa"; // Search icon
+import { FaSearch, FaPlus, FaChevronLeft } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
+import { BsThreeDotsVertical, BsCheck2All } from "react-icons/bs";
 import Header from "./Header";
 import LeftAside from "./LeftAside";
 import RightAside from "./RightAside";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
-import Chats from "./Chats"; // Import Chats component
-import GroupChats from "./GroupChats"; // Import GroupChats component
-import AddGroupModal from "./AddGroupModal";
-import Modal from "react-modal"; // install it: npm install react-modal
-
+import Chats from "./Chats";
+import GroupChats from "./GroupChats";
+import Modal from "react-modal";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ChatList = () => {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
@@ -22,12 +23,10 @@ const ChatList = () => {
     const [groupList, setGroupList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedGroup, setSelectedGroup] = useState(null);
-    // const [showAddGroupModal, setShowAddGroupModal] = useState(false);
     const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
     const [newGroupName, setNewGroupName] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);
-
-
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         fetchUsers();
@@ -77,7 +76,6 @@ const ChatList = () => {
         }
 
         try {
-            // Step 1: Create group
             const groupRes = await axios.post(
                 `${import.meta.env.VITE_API_GROUP}/register/new-group`,
                 {
@@ -89,7 +87,6 @@ const ChatList = () => {
 
             const groupId = groupRes.data || groupRes.data;
 
-            // Step 2: Add members
             const memberRequests = selectedUsers.map(uid =>
                 axios.post(
                     `${import.meta.env.VITE_API_GROUPMEMBER}/add-member`,
@@ -98,7 +95,6 @@ const ChatList = () => {
                 )
             );
 
-            // Add current user as admin
             memberRequests.push(
                 axios.post(
                     `${import.meta.env.VITE_API_GROUPMEMBER}/add-member`,
@@ -109,7 +105,6 @@ const ChatList = () => {
 
             await Promise.all(memberRequests);
             toast.success("Group created successfully!");
-
             closeGroupModal();
             fetchGroups();
         } catch (err) {
@@ -117,126 +112,226 @@ const ChatList = () => {
         }
     };
 
+    const filteredUsers = userList.filter(user => 
+        user.id !== userId && 
+        (user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        user.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
+
+    const filteredGroups = groupList.filter(group => 
+        group.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
-        <div>
-            <div className="main-container">
-                <div className="header-section">
-                    <Header />
-                </div>
+        <div className="app-container">
+            <div className="header-section">
+                <Header />
+            </div>
 
-                <div className="container">
-                    <div className="left-section">
-                        <LeftAside />
-                    </div>
+            <div className="main-content">
+                
+                    <LeftAside />
+                
 
-                    {/* If a user is selected, show Chats component */}
+                <AnimatePresence mode="wait">
                     {selectedUser ? (
-                        <Chats receiver={selectedUser} onBack={() => setSelectedUser(null)} />
+                        <motion.div
+                            key="chats"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            className="center-section"
+                        >
+                            <Chats 
+                                receiver={selectedUser} 
+                                onBack={() => setSelectedUser(null)} 
+                            />
+                        </motion.div>
                     ) : selectedGroup ? (
-                        <GroupChats group={selectedGroup} onBack={() => setSelectedGroup(null)} />
+                        <motion.div
+                            key="group-chats"
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            className="center-section"
+                        >
+                            <GroupChats 
+                                group={selectedGroup} 
+                                onBack={() => setSelectedGroup(null)} 
+                            />
+                        </motion.div>
                     ) : (
-                        <div className="profile-containers">
+                        <motion.div
+                            key="chat-list"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="center-section"
+                        >
                             <div className="chat-container">
-                                {/* Tabs */}
+                                
+
                                 <div className="chat-tabs">
                                     <button
                                         className={activeTab === "users" ? "active" : ""}
-                                        onClick={() => { setActiveTab("users"); setSelectedUser(null); setSelectedGroup(null); }}
+                                        onClick={() => { setActiveTab("users"); setSearchQuery(""); }}
                                     >
-                                        Users
+                                        Contacts
                                     </button>
                                     <button
                                         className={activeTab === "groups" ? "active" : ""}
-                                        onClick={() => { setActiveTab("groups"); setSelectedUser(null); setSelectedGroup(null); }}
+                                        onClick={() => { setActiveTab("groups"); setSearchQuery(""); }}
                                     >
                                         Groups
                                     </button>
                                 </div>
 
-                                {/* List Section */}
-                                <div className="chat-list">
-                                    {activeTab === "users" &&
-                                        userList
-                                            .filter(user => user.id !== userId)
-                                            .map((user) => (
-                                                <div key={user.id} className="chat-item" onClick={() => setSelectedUser(user)}>
-                                                    <img src={user.profilePic !== "null" ? user.profilePic : "/default-avatar.png"} alt={user.firstName} className="chat-avatar" />
-                                                    <div className="chat-info">
-                                                        <h4 className="chat-name">{capitalizeFirstLetter(user.firstName) + " " + capitalizeFirstLetter(user.lastName)}</h4>
-                                                        <p className="chat-message">{user.email}</p>
-                                                    </div>
-                                                </div>
-                                            ))
-                                    }
-
-                                    {activeTab === "groups" && (
+                                <div className="chat-list-container">
+                                    {activeTab === "users" && (
                                         <>
-                                            {/* Add Group Button */}
-                                            <div className="group-header">
-                                                <button className="add-group-btn" onClick={openGroupModal}>+ New Group</button>
-                                            </div>
-
-                                            {/* Modal for creating group */}
-                                            <Modal isOpen={isGroupModalOpen} onRequestClose={closeGroupModal} className="group-modal">
-                                                <h2>Create New Group</h2>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Enter Group Name"
-                                                    value={newGroupName}
-                                                    onChange={(e) => setNewGroupName(e.target.value)}
-                                                />
-                                                <select
-                                                    multiple
-                                                    value={selectedUsers}
-                                                    onChange={(e) =>
-                                                        setSelectedUsers(Array.from(e.target.selectedOptions, option => option.value))
-                                                    }
-                                                >
-                                                    {userList
-                                                        .filter(user => user.id !== userId)
-                                                        .map(user => (
-                                                            <option key={user.id} value={user.id}>
-                                                                {user.firstName} {user.lastName}
-                                                            </option>
-                                                        ))}
-                                                </select>
-                                                <br />
-                                                <button onClick={handleCreateGroup}>Create Group</button>
-                                                <button onClick={closeGroupModal}>Cancel</button>
-                                            </Modal>
-
-                                            {/* Group List */}
-                                            {groupList.map((group) => (
-                                                <div key={group.id} className="chat-item" onClick={() => setSelectedGroup(group)}>
-                                                    <div className="chat-avatar group-avatar">G</div>
-                                                    <div className="chat-info">
-                                                        <h4 className="chat-name">{capitalizeFirstLetter(group.name)}</h4>
-                                                        <p className="chat-message">{group.members.length} Members</p>
-                                                    </div>
+                                            {filteredUsers.length > 0 ? (
+                                                filteredUsers.map((user) => (
+                                                    <motion.div 
+                                                        key={user.id} 
+                                                        className="chat-item"
+                                                        onClick={() => setSelectedUser(user)}
+                                                        whileHover={{ scale: 1.02 }}
+                                                        whileTap={{ scale: 0.98 }}
+                                                    >
+                                                        <div className="avatar-container">
+                                                            <img 
+                                                                src={user.profilePic !== "null" ? user.profilePic : "/default-avatar.png"} 
+                                                                alt={user.firstName} 
+                                                                className="chat-avatar" 
+                                                            />
+                                                            <span className={`status-dot ${Math.random() > 0.5 ? 'online' : 'offline'}`}></span>
+                                                        </div>
+                                                        <div className="chat-info">
+                                                            <h4 className="chat-name">
+                                                                {capitalizeFirstLetter(user.firstName) + " " + capitalizeFirstLetter(user.lastName)}
+                                                            </h4>
+                                                            <p className="chat-message">{user.email}</p>
+                                                        </div>
+                                                        <div className="chat-time">
+                                                            <BsCheck2All className="read-icon" />
+                                                        </div>
+                                                    </motion.div>
+                                                ))
+                                            ) : (
+                                                <div className="empty-state">
+                                                    <p>No contacts found</p>
                                                 </div>
-                                            ))}
+                                            )}
                                         </>
                                     )}
 
+                                    {activeTab === "groups" && (
+                                        <>
+                                            <div className="group-header">
+                                                <motion.button 
+                                                    className="add-group-btn"
+                                                    onClick={openGroupModal}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                >
+                                                    <FaPlus /> Create Group
+                                                </motion.button>
+                                            </div>
+
+                                            <Modal 
+                                                isOpen={isGroupModalOpen} 
+                                                onRequestClose={closeGroupModal} 
+                                                className="group-modal"
+                                                overlayClassName="modal-overlay"
+                                            >
+                                                <h2>Create New Group</h2>
+                                                <div className="form-group">
+                                                    <label>Group Name</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter Group Name"
+                                                        value={newGroupName}
+                                                        onChange={(e) => setNewGroupName(e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Select Members</label>
+                                                    <select
+                                                        multiple
+                                                        value={selectedUsers}
+                                                        onChange={(e) =>
+                                                            setSelectedUsers(Array.from(e.target.selectedOptions, option => option.value))
+                                                        }
+                                                    >
+                                                        {userList
+                                                            .filter(user => user.id !== userId)
+                                                            .map(user => (
+                                                                <option key={user.id} value={user.id}>
+                                                                    {user.firstName} {user.lastName}
+                                                                </option>
+                                                            ))}
+                                                    </select>
+                                                </div>
+                                                <div className="modal-actions">
+                                                    <motion.button 
+                                                        className="cancel-btn"
+                                                        onClick={closeGroupModal}
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        Cancel
+                                                    </motion.button>
+                                                    <motion.button 
+                                                        className="create-btn"
+                                                        onClick={handleCreateGroup}
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        Create Group
+                                                    </motion.button>
+                                                </div>
+                                            </Modal>
+
+                                            {filteredGroups.length > 0 ? (
+                                                filteredGroups.map((group) => (
+                                                    <motion.div 
+                                                        key={group.id} 
+                                                        className="chat-item group-item"
+                                                        onClick={() => setSelectedGroup(group)}
+                                                        whileHover={{ scale: 1.02 }}
+                                                        whileTap={{ scale: 0.98 }}
+                                                    >
+                                                        <div className="group-avatar">
+                                                            {group.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <div className="chat-info">
+                                                            <h4 className="chat-name">
+                                                                {capitalizeFirstLetter(group.name)}
+                                                            </h4>
+                                                            <p className="chat-message">
+                                                                {group.members.length} {group.members.length === 1 ? 'Member' : 'Members'}
+                                                            </p>
+                                                        </div>
+                                                        <div className="chat-time">
+                                                            <BsThreeDotsVertical />
+                                                        </div>
+                                                    </motion.div>
+                                                ))
+                                            ) : (
+                                                <div className="empty-state">
+                                                    <p>No groups found</p>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
+                </AnimatePresence>
 
-                    <div className="right-section">
-                        <RightAside />
-                    </div>
-                </div>
+                    <RightAside />
             </div>
-
-            {/* {showAddGroupModal && (
-                <AddGroupModal
-                    onClose={() => setShowAddGroupModal(false)}
-                    onGroupCreated={fetchGroups}
-                />
-            )} */}
-
         </div>
     );
 };

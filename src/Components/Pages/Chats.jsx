@@ -1,16 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaPaperclip } from "react-icons/fa6";
 import { IoCall, IoArrowBackSharp } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 import { HiOutlinePhoto } from "react-icons/hi2";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { IoIosSend } from "react-icons/io";
+import { BsCheck2All } from "react-icons/bs";
 import WebSocketService from '../Services/WebSocketService';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import "../CSS/Chats.css";
 import VideoChat from './VideoChat';
 import VoiceCall from './VoiceCall';
+import { motion, AnimatePresence } from 'framer-motion';
+import { format } from 'date-fns';
 
 function Chats({ receiver, onBack }) {
     const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
@@ -29,13 +33,11 @@ function Chats({ receiver, onBack }) {
     const messageEndRef = useRef(null);
     const [showVideoCall, setShowVideoCall] = useState(false);
     const [showVoiceCall, setShowVoiceCall] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const scrollToBottom = () => {
-        setTimeout(() => {
-            messageEndRef.current?.scrollIntoView({ behavior: "auto" });
-        }, 100);
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
-
 
     useEffect(() => {
         setMessages([]);
@@ -46,10 +48,7 @@ function Chats({ receiver, onBack }) {
                     params: { senderId: userId, receiverId: receiver.id },
                 });
                 setMessages(response.data);
-
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 100); // Short delay to allow UI update
+                setTimeout(scrollToBottom, 100);
             } catch (error) {
                 console.error("Error fetching messages:", error);
             }
@@ -63,9 +62,7 @@ function Chats({ receiver, onBack }) {
                 (message.senderId === receiver.id && message.receiverId === userId)
             ) {
                 setMessages((prevMessages) => [...prevMessages, message]);
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 100);
+                setTimeout(scrollToBottom, 100);
             }
         });
 
@@ -73,7 +70,6 @@ function Chats({ receiver, onBack }) {
             WebSocketService.disconnect();
         };
     }, [receiver.id, userId]);
-
 
     const sendMessage = () => {
         if (messageInput.trim() === "") return;
@@ -89,7 +85,14 @@ function Chats({ receiver, onBack }) {
         WebSocketService.sendPrivateMessage(receiver.id, newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
         setMessageInput("");
-        scrollToBottom();
+        setTimeout(scrollToBottom, 100);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
     };
 
     const handlePhotoClick = () => {
@@ -103,6 +106,7 @@ function Chats({ receiver, onBack }) {
         setSelectedFile(file);
         setFilePreview(true);
     };
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -125,7 +129,7 @@ function Chats({ receiver, onBack }) {
                 },
             });
 
-            const fileUrl = response.data; // Adjust based on backend response
+            const fileUrl = response.data;
             const fileMessage = {
                 senderId: userId,
                 receiverId: receiver.id,
@@ -138,7 +142,7 @@ function Chats({ receiver, onBack }) {
             setMessages((prevMessages) => [...prevMessages, fileMessage]);
             setFilePreview(false);
             setSelectedFile(null);
-            scrollToBottom();
+            setTimeout(scrollToBottom, 100);
         } catch (error) {
             console.error("Error uploading file:", error);
         }
@@ -151,17 +155,14 @@ function Chats({ receiver, onBack }) {
         formData.append("file", selectedImage);
 
         try {
-            console.log("Enter");
-
             const response = await axios.post("http://localhost:8081/collapp/upload-image", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
                 },
             });
-            console.log("After");
 
-            const fileUrl = response.data; // Adjust based on backend response
+            const fileUrl = response.data;
             const fileMessage = {
                 senderId: userId,
                 receiverId: receiver.id,
@@ -174,68 +175,129 @@ function Chats({ receiver, onBack }) {
             setMessages((prevMessages) => [...prevMessages, fileMessage]);
             setImagePreview(false);
             setSelectedImage(null);
-            scrollToBottom();
+            setTimeout(scrollToBottom, 100);
         } catch (error) {
             console.error("Error uploading file:", error);
         }
     };
 
+    const formatTime = (timestamp) => {
+        return format(new Date(timestamp), 'h:mm a');
+    };
+
     return (
-        <div className="chat-containers">
-            <div className="chat-section-main">
-                <div className="chat-header">
-                    <div className='avatar-title'>
-                        <button className="back-buttons" onClick={onBack}>
-                            <IoArrowBackSharp style={{ color: "#fff", fontSize: "24px", padding: "0 7px 0 0" }} />
-                        </button>
-                        <img src={receiver.profilePic !== "null" ? receiver.profilePic : "/default-avatar.png"} className="Profile-pic" />
-                        <h3 style={{ margin: "0" }}>{receiver.firstName} {receiver.lastName}</h3>
+        <div className="chat-container">
+            <div className="chat-header">
+                <div className="chat-header-content">
+                    <button className="back-button" onClick={onBack}>
+                        <IoArrowBackSharp className="back-icon" />
+                    </button>
+                    <div className="user-info">
+                        <img 
+                            src={receiver.profilePic !== "null" ? receiver.profilePic : "/default-avatar.png"} 
+                            className="profile-pic" 
+                            alt={receiver.firstName}
+                        />
+                        <div className="user-details">
+                            <h3>{receiver.firstName} {receiver.lastName}</h3>
+                            <p>{isTyping ? 'typing...' : 'online'}</p>
+                        </div>
                     </div>
-                    <div className='call-list'>
-                        <IoCall className='call' onClick={() => setShowVoiceCall(true)} style={{color:"#fff"}} />
-                        <FaVideo className='call' onClick={() => setShowVideoCall(true)} style={{color:"#fff"}}/>
-                        <HiDotsVertical className='call' />
+                    <div className="call-actions">
+                        <button className="call-btn" onClick={() => setShowVoiceCall(true)}>
+                            <IoCall className="call-icon" />
+                        </button>
+                        <button className="call-btn" onClick={() => setShowVideoCall(true)}>
+                            <FaVideo className="call-icon" />
+                        </button>
+                        <button className="menu-btn">
+                            <HiDotsVertical className="menu-icon" />
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="chat-messages">
+            <div className="chat-messages">
+                <AnimatePresence>
                     {messages.map((msg, index) => {
                         const isSentByUser = msg.sender?.id === userId || msg.senderId === userId;
+                        const messageTime = formatTime(msg.timestamp);
+                        
                         return (
-                            <div key={index} className={isSentByUser ? "message right" : "message left"}>
+                            <motion.div
+                                key={index}
+                                className={`message ${isSentByUser ? 'right' : 'left'}`}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
                                 {!isSentByUser && (
-                                    <img src={receiver.profilePic !== "null" ? receiver.profilePic : "/default-avatar.png"} className="Profile-pic left" alt="Receiver" />
+                                    <img 
+                                        src={receiver.profilePic !== "null" ? receiver.profilePic : "/default-avatar.png"} 
+                                        className="profile-pic left" 
+                                        alt="Receiver" 
+                                    />
                                 )}
-                                <div className={`message-box ${isSentByUser ? "sent" : "received"}`}>
+                                <div className={`message-content ${isSentByUser ? 'sent' : 'received'}`}>
                                     {msg.status === "IMAGE" ? (
-                                        <img src={msg.message} alt="Sent image" className="sent-image" />
+                                        <div className="image-message">
+                                            <img src={msg.message} alt="Sent" className="message-image" />
+                                            <span className="message-time">{messageTime}</span>
+                                        </div>
                                     ) : msg.status === "FILE" ? (
-                                        <a href={msg.message} target="_blank" rel="noopener noreferrer" className="file-link">
-                                            📄 View Attachment
-                                        </a>
+                                        <div className="file-message">
+                                            <div className="file-info">
+                                                <FaPaperclip className="file-icon" />
+                                                <a 
+                                                    href={msg.message} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer" 
+                                                    className="file-link"
+                                                >
+                                                    {msg.message.split('/').pop()}
+                                                </a>
+                                            </div>
+                                            <span className="message-time">{messageTime}</span>
+                                        </div>
                                     ) : (
-                                        msg.message
+                                        <div className="text-message">
+                                            <p>{msg.message}</p>
+                                            <div className="message-meta">
+                                                <span className="message-time">{messageTime}</span>
+                                                {isSentByUser && <BsCheck2All className="read-receipt" />}
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                                 {isSentByUser && (
-                                    <img src={senderProfile !== "null" ? senderProfile : "/default-avatar.png"} className="Profile-pic right" alt="Sender" />
+                                    <img 
+                                        src={senderProfile !== "null" ? senderProfile : "/default-avatar.png"} 
+                                        className="profile-pic right" 
+                                        alt="Sender" 
+                                    />
                                 )}
-                            </div>
+                            </motion.div>
                         );
                     })}
-                    <div ref={messageEndRef}></div>
-                </div>
+                </AnimatePresence>
+                <div ref={messageEndRef} />
+            </div>
 
-                <div className="chat-input">
-                    <FaPlus className='chat-icon' onClick={() => fileInputRef.current.click()} />
+            <div className="chat-input-container">
+                <div className="attachment-options">
+                    <button className="attach-btn" onClick={() => fileInputRef.current.click()}>
+                        <FaPaperclip className="attach-icon" />
+                    </button>
                     <input
                         type="file"
-                        accept=".pdf, .doc, .docx"
+                        accept=".pdf,.doc,.docx,.txt"
                         ref={fileInputRef}
                         style={{ display: "none" }}
                         onChange={handleFileChange}
                     />
-                    <HiOutlinePhoto className='chat-icon' onClick={handlePhotoClick} />
+                    <button className="attach-btn" onClick={handlePhotoClick}>
+                        <HiOutlinePhoto className="attach-icon" />
+                    </button>
                     <input
                         type="file"
                         accept="image/*"
@@ -243,26 +305,80 @@ function Chats({ receiver, onBack }) {
                         style={{ display: "none" }}
                         onChange={handleImageChange}
                     />
-                    <input type="text" placeholder="Type a message..." value={messageInput} onChange={(e) => setMessageInput(e.target.value)} />
-                    <IoIosSend className="send-icon" onClick={sendMessage} />
+                    <button className="attach-btn">
+                        <HiOutlineEmojiHappy className="attach-icon" />
+                    </button>
                 </div>
-
-                {filePreview && (
-                    <div className="file-preview-modal">
-                        <p>Selected File: {selectedFile?.name}</p>
-                        <button onClick={sendFile}>Send File</button>
-                        <button onClick={() => setFilePreview(false)}>Cancel</button>
-                    </div>
-                )}
-
-                {imagePreview && (
-                    <div className="file-preview-modal">
-                        <p>Selected File: {selectedImage?.name}</p>
-                        <button onClick={sendImage}>Send Image</button>
-                        <button onClick={() => setImagePreview(false)}>Cancel</button>
-                    </div>
-                )}
+                <div className="message-input-wrapper">
+                    <textarea
+                        placeholder="Type a message..."
+                        value={messageInput}
+                        onChange={(e) => setMessageInput(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        rows={1}
+                    />
+                    <button 
+                        className="send-button" 
+                        onClick={sendMessage}
+                        disabled={!messageInput.trim()}
+                    >
+                        <IoIosSend className="send-icon" />
+                    </button>
+                </div>
             </div>
+
+            <AnimatePresence>
+                {filePreview && (
+                    <motion.div 
+                        className="preview-modal"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                    >
+                        <div className="preview-content">
+                            <h4>Send File</h4>
+                            <p>{selectedFile?.name}</p>
+                            <div className="preview-actions">
+                                <button className="cancel-btn" onClick={() => setFilePreview(false)}>
+                                    Cancel
+                                </button>
+                                <button className="send-btn" onClick={sendFile}>
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {imagePreview && (
+                    <motion.div 
+                        className="preview-modal"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                    >
+                        <div className="preview-content">
+                            <h4>Send Image</h4>
+                            <img 
+                                src={URL.createObjectURL(selectedImage)} 
+                                alt="Preview" 
+                                className="image-preview"
+                            />
+                            <div className="preview-actions">
+                                <button className="cancel-btn" onClick={() => setImagePreview(false)}>
+                                    Cancel
+                                </button>
+                                <button className="send-btn" onClick={sendImage}>
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <VideoChat
                 isOpen={showVideoCall}
                 onClose={() => setShowVideoCall(false)}
@@ -275,7 +391,8 @@ function Chats({ receiver, onBack }) {
                 onClose={() => setShowVoiceCall(false)}
                 userId={userId}
                 userName={firstName}
-                receiverId={receiver.id}/>
+                receiverId={receiver.id}
+            />
         </div>
     );
 }
