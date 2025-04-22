@@ -24,6 +24,7 @@ import VideoApi from './Components/Pages/VideoConference'
 import Register from './Components/Authentications/Register'
 import AdminDashboard from './Components/Pages/Admin/AdminDashboard'
 import SuperAdminDashboard from './Components/Pages/SuperAdmin/SuperAdminDashboard'
+import Notifications from './Components/Pages/Notifications'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -62,6 +63,7 @@ function App() {
                 <Route path="/video-api" element={<VideoApi/>} />
                 <Route path="/admin" element={<AdminDashboard/>} />
                 <Route path="/super-admin" element={<SuperAdminDashboard/>} />
+                <Route path="/notification" element={<Notifications/>} />
             </Routes>
         </BrowserRouter>
 

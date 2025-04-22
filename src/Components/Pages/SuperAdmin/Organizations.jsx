@@ -18,7 +18,7 @@ function Organizations() {
     const fetchOrganizations = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://192.168.101.3:8081/collapp/organization/get-all-organization");
+            const response = await axios.get("https://192.168.101.6:8081/collapp/organization/get-all-organization");
             setOrganizations(response.data);
         } catch (error) {
             console.error("Error fetching organizations:", error);
@@ -30,7 +30,7 @@ function Organizations() {
     const updateOrganizationStatus = async (id, status) => {
         setIsUpdating(id);
         try {
-            await axios.put(`https://192.168.101.3:8081/collapp/organization/update-organization/${id}`, status, {
+            await axios.put(`https://192.168.101.6:8081/collapp/organization/update-organization/${id}`, status, {
                 headers: { "Content-Type": "text/plain" },
             });
             fetchOrganizations();
