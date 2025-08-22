@@ -1,0 +1,274 @@
+/* Main Chat Container */
+.chat-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f8f8f8;
+    flex-direction: column;
+}
+
+/* Left Sidebar */
+.left-sidebar {
+    width: 20%;
+    background-color: #3a3a3a;
+    color: white;
+}
+
+.sidebar-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    padding: 20px;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-list li {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    /* justify-content: center; */
+    gap: 20px;
+    padding: 15px;
+}
+
+.task-list li:hover {
+    background-color: #5d5d5d;
+}
+
+.active-menu{
+    background-color: #5d5d5d;
+}
+
+.icon-program {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Chat Section */
+.chat-section {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-left: 1px solid #ccc;
+}
+
+.chat-icon {
+    font-size: 24px;
+    margin: 0 15px;
+}
+
+/* Chat Header */
+.chat-header {
+    display: flex;
+    align-items: center;
+    background-color: #3a3a3a;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.avatar-title {
+    display: flex;
+    align-items: center;
+}
+
+.call {
+    font-size: 40px;
+    padding: 10px;
+}
+.call:hover{
+    background-color: #5d5d5d;
+    border-radius: 50%;
+}
+
+.call-list {
+    display: flex;
+    gap: 25px;
+    margin-right: 13px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 13px;
+    object-fit: cover;
+}
+
+/* Chat Messages */
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.message.left {
+    justify-content: flex-start;
+}
+
+.message.right {
+    justify-content: flex-end;
+}
+
+.message-box {
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 60%;
+}
+
+.left-box {
+    background-color: #e0e0e0;
+}
+
+.right-box {
+    background-color: #3a3a3a;
+    color: white;
+}
+
+.message-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+
+/* Chat Input */
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: white;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+}
+
+.send-icon {
+    font-size: 30px;
+    cursor: pointer;
+    margin:0 10px;
+    color: #3a3a3a;
+}
+
+
+/* Main Container */
+.assignments-container {
+    background-color: white;
+    padding: 20px;
+    overflow-y: scroll;
+  }
+  
+  /* Section Title */
+  .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Assignments List */
+  .assignments-list {
+    margin-top: 10px;
+  }
+  
+  /* Assignment Card */
+  .assignment-card {
+    background: #f8f8f8;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Assignment Header */
+  .assignment-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .publish-date,
+  .due-date {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  
+  /* Assignment Description */
+  .assignment-description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Attachments */
+  .attachment {
+        /* margin-top: 5px; */
+        padding: 5px 15px;
+        background-color: #e0e0e0;
+        display: flex;
+        font-size: 14px;
+        justify-content: center;
+        align-items: center;
+  }
+  .assignment-file{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  
+  /* Submit Button */
+  .submit-btn {
+       padding: 10px 20px;
+       background-color: black;
+       color: white;
+       border: none;
+       cursor: pointer;
+       float: right;
+       border-radius: 4px;
+  }
+  
+  .submit-btn:hover {
+    background-color: #333;
+  }
+  
+  /* Add Assignment Button */
+  .add-assignment-btn {
+    display: flex;
+    margin: 20px auto;
+    padding: 10px 15px;
+    background-color: #26267e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    position: fixed;
+    bottom: 30px;
+    right: 25px;
+    align-items: center;
+    border-radius: 5px;
+  }
+  
+  .add-assignment-btn:hover {
+    background-color: #333;
+  }
+  

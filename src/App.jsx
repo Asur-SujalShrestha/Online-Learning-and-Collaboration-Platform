@@ -1,0 +1,74 @@
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import VideoStream from './Components/VideoStream'
+import Login from './Components/Authentications/Login'
+import { Toaster } from "react-hot-toast";
+import Home from './Components/Pages/Home'
+import Header from './Components/Pages/Header'
+import Profile from './Components/Pages/Profile'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostDetail from './Components/Pages/PostDetail'
+import Program from './Components/Pages/Program'
+import ProgramDetail from './Components/Pages/ProgramDetail'
+import TeacherContentDetail from './Components/Pages/TeacherContentDetail'
+import Notes from './Components/Pages/Notes'
+import ChatList from './Components/Pages/ChatList'
+import VideoChat from './Components/Pages/VideoChat'
+import RoomsList from './Components/Pages/RoomsList'
+import Planning from './Components/Pages/Planning'
+import ConferenceRoom from './Components/Pages/VideoConference'
+import ConferencesPage from './Components/Pages/CreateConference'
+import VideoApi from './Components/Pages/VideoConference'
+import Register from './Components/Authentications/Register'
+import AdminDashboard from './Components/Pages/Admin/AdminDashboard'
+import SuperAdminDashboard from './Components/Pages/SuperAdmin/SuperAdminDashboard'
+import Notifications from './Components/Pages/Notifications'
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      {/* <VideoStream/> */}
+      <Toaster position="top-center"
+        toastOptions={{
+          duration: 5000,
+          style: {
+            fontSize: '19px',
+            padding: '15px',
+            borderRadius: '8px',
+            background: '#333',
+            color: '#fff',
+          },
+        }} />
+      <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path='/home' element={<Home/>}/>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/postDetail/:postId" element={<PostDetail/>}/>
+                <Route path='/program' element={<Program />} />
+                <Route path="/programDetail/:programId" element={<ProgramDetail />} />
+                <Route path="/note" element={<Notes />} />
+                <Route path="/chat" element={<ChatList />} />
+                <Route path="/videocalls" element={<RoomsList />} />
+                <Route path="/videochat/:roomId" element={<VideoChat />} />
+                <Route path="/planning" element={<Planning />} />
+                <Route path="/conference/:conferenceId" element={<ConferenceRoom />} />
+                <Route path="/create" element={<ConferencesPage/>} />
+                <Route path="/video-api" element={<VideoApi/>} />
+                <Route path="/admin" element={<AdminDashboard/>} />
+                <Route path="/super-admin" element={<SuperAdminDashboard/>} />
+                <Route path="/notification" element={<Notifications/>} />
+            </Routes>
+        </BrowserRouter>
+
+    </>
+  )
+}
+
+export default App

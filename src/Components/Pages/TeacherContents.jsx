@@ -1,0 +1,93 @@
+import React, { useEffect, useState } from 'react';
+import { FaPlus } from "react-icons/fa6";
+import { IoCall } from "react-icons/io5";
+import { FaVideo } from "react-icons/fa";
+import { HiDotsVertical } from "react-icons/hi";
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { CiFolderOn } from "react-icons/ci";
+import "../CSS/TeacherContent.css";
+import TeacherContentDetail from './TeacherContentDetail';
+import TeacherContentForm from './TeacherContentForm';
+import { jwtDecode } from 'jwt-decode';
+
+function TeacherContents({ programId, programDetail }) {
+    const [contentDetail, setContentDetail] = useState(null);
+    const [step, setStep] = useState("1");
+    const [contentId, setContentId] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+
+    const token = localStorage.getItem("token")?.replace(/^"(.*)"$/, '$1');
+    const userId = token ? jwtDecode(token).id : null;
+
+    useEffect(() => {
+        
+
+        fetchContent();
+    }, []);
+
+    const fetchContent = async () => {
+        const URL = `${import.meta.env.VITE_API_TEACHER_CONTENT}/get-content/program/${programId}`;
+        try {
+            const response = await axios.get(URL, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setContentDetail(response.data);
+        }
+        catch (error) {
+            toast.error(error.response.data);
+        }
+    }
+
+    const refreshContent=()=>{
+        fetchContent();
+    }
+
+    return (
+        <div className="chat-section">
+            <div className="chat-header">
+                <div className='avatar-title'>
+                    <img
+                        src={programDetail?.members?.[0]?.user.profilePic !== "null" &&
+                            programDetail?.members?.[0]?.user.profilePic !== "none"
+                            ? programDetail?.members?.[0]?.user.profilePic
+                            : ""}
+                        alt="Profile"
+                        className="profile-pic"
+                    />
+                    <h2 style={{color:"white"}}>{programDetail?.name || "Loading..."}</h2>
+                </div>
+                <div className='call-list'>
+                    <IoCall className='call' />
+                    <FaVideo className='call' />
+                    <HiDotsVertical className='call' />
+                </div>
+            </div>
+
+            {step === "1" && (<div className="assignments-container">
+                {contentDetail?.length > 0 ? (
+                    <div className="assignments-list">
+                        {contentDetail.map((content, index) => (
+                            <div onClick={() => { setContentId(content.id); setStep("2"); }} key={index} className="assignment-card">
+                                <div className="assignment-headers">
+                                    <CiFolderOn style={{ fontSize: "30px" }} /><h3>{content.title}</h3>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p>No contents available.</p>
+                )}
+
+                <button className="add-assignment-btn" onClick={() => setShowForm(true)}>
+                    Add content <FaPlus className='chat-icon' />
+                </button>
+
+                {showForm && <TeacherContentForm onClose={() => setShowForm(false)} userId={userId} programId={programId} refreshContent={refreshContent}/>}
+            </div>)}
+            {step === "2" && (<TeacherContentDetail contentId={contentId} setStep={setStep} />)}
+        </div>
+    );
+}
+
+export default TeacherContents;

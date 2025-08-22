@@ -1,0 +1,194 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #2c2c2c;
+}
+
+.login-container {
+  display: flex;
+  width: 70%;
+  height: 80%;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-left {
+  width: 50%;
+  position: relative;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-title {
+  position: absolute;
+  top: 20px;
+  left: 35%;
+  font-weight: 300;
+  font-size: 64px;
+  color: black;
+  font-family: 'Alex Brush';
+}
+
+.login-right {
+  width: 40%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.login-title {
+  font-size: 40px;
+  text-align: center;
+  margin: 0px 0 10px 0;
+  padding: auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+input {
+    /* width: 100%; */
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+}
+
+.password-container {
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  flex: 1;
+}
+
+.show-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.form-group:nth-child(2){
+  margin-top: 10px;
+}
+.form-options label{
+  display: flex;
+  width: 20%;
+}
+.rememberDiv{
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.rememberDiv input{
+  width: auto;
+}
+.rememberDiv label{
+  flex: 1;
+  font-size: 18px;
+  margin: 0;
+}
+
+.forgot-password {
+  color: #000;
+  font-size: 19px;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 32%;
+    padding: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    top: 20px;
+}
+
+.login-button:hover {
+  background-color: #333;
+}
+.forgetPassword-title{
+  font-size: 40px;
+  text-align: center;
+  margin: 30px 0 0 0;
+  padding: auto;
+}
+
+.forgetPassword-button{
+    width: 32%;
+    padding: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    top: 20px;
+}
+
+.forgetPassword-form-group{
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+.otp-title{
+  text-align: center;
+  margin-top: -30px;
+}
+.top-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background-color: red;
+  transition: width 0.1s linear;
+}
+
+
+.top-loader.loading {
+  width: 100%;
+}
