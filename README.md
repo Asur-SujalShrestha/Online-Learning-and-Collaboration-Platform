@@ -78,7 +78,7 @@ An online learning and collaboration platform built with ReactJS, Spring Boot, a
 
 **🔹 Clone the Repository**
 
-- git clone https://github.com/Asur-SujalShrestha/online-learning-collaboration.git
+- git clone https://github.com/Asur-SujalShrestha/Online-Learning-and-Collaboration-Platform.git
 
 - cd online-learning-collaboration
 
