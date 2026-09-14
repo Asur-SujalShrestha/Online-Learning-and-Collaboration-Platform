@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: collapp
+  namespace: collapp-dev-namespace
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: collapp
+  template:
+    metadata:
+      labels:
+        app: collapp
+
+    spec:
+      containers:
+        - name: collapp
+          image: collapp-compose:v4
+          ports:
+            - containerPort: 8081
+          livenessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health
+              scheme: HTTPS
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 15
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health
+              scheme: HTTPS
+            failureThreshold: 15
+            periodSeconds: 15
+            timeoutSeconds: 3
+          startupProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health
+              scheme: HTTPS
+            failureThreshold: 15
+            periodSeconds: 15
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: 500m
+              memory: "1Gi"
+          envFrom:
+            - configMapRef:
+                name: collapp-config
+
