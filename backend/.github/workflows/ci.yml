@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
   pull_request:
     branches:
       - main
+    paths:
+      - 'backend/**'
 
 jobs:
   build:
@@ -23,4 +27,5 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and test
+        working-directory: backend
         run: ./mvnw clean test
