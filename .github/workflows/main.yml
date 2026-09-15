@@ -27,7 +27,9 @@ jobs:
           distribution: 'temurin'
           
       - name: Grant permission to maven
-        run: chmod +x backend/mvnw
+        run: 
+         cd backend
+         chmod +x mvnw
 
       - name: Build and test
         working-directory: backend
