@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Grant permission to maven
+        run: chmod +x mvnw
+        
       - name: Checkout code
         uses: actions/checkout@v4
 
